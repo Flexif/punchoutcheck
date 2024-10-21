@@ -1,0 +1,82 @@
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 20px;
+}
+
+.first {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    flex: 1;
+    text-align: center;
+    outline: 3px solid var(--bgLight);
+    background: #a8c7fa74;
+    border-radius: 10px;
+    height: 600px;
+}
+
+.second {
+    flex: 1;
+    text-align: center;
+    outline: 3px solid var(--bgLight);
+    background: #a8c7fa74;
+    height: 600px;
+    border-radius: 10px;
+}
+
+
+.third {
+    flex: 1;
+    text-align: center;
+    outline: 3px solid var(--bgLight);
+    background: #a8c7fa74;
+    height: 600px;
+    border-radius: 10px;
+  
+}
+
+.fourth {
+    flex: 1;
+    text-align: center;
+    outline: 3px solid var(--bgLight);
+    background: #a8c7fa74;
+    height: 600px;
+    border-radius: 10px;
+}
+
+.title {
+    padding: 10px;
+    font-weight: 500;
+    font-size: 20px;
+    color: var(--text);
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    justify-content: center;
+    text-align: center;
+
+}
+.content {
+    font-weight: 500;
+    padding: 0 20px;
+    margin: 0 auto;
+    font-size: 15px;
+    text-align:left;
+    color: var(--text);
+}
+
+
+.card {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    overflow: hidden;
+}
+
+.first:hover, 
+.second:hover, 
+.third:hover,
+.fourth:hover {
+    outline: 3px solid var(--iconHover);
+}

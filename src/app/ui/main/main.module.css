@@ -1,0 +1,32 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+.navbar {
+    padding: 10px 20px;
+    flex: 0.5;
+    background-color: var(--bgLight);
+    border-bottom: 1px solid var(--iconHover);
+    border-bottom-right-radius: 150px ;
+    border-bottom-left-radius: 150px ;
+}
+.navbar:hover {
+    background-color: var(--bgSec);
+}
+.content {
+    padding: 20px;
+    flex: 6;
+}
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 30px;
+    background-color: var(--bgLight);
+    border-top: 1px solid var(--iconHover);
+    min-height: 30px;
+    color: var(--text);
+    font-size: 12px;
+}

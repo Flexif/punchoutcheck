@@ -1,0 +1,180 @@
+.container{
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    min-height: 100vh;
+    padding: 20px;
+}
+  .button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+    font-weight: 400;
+    background-color: var(--iconHover);
+    padding: 10px;
+    border-radius: 5px;
+    color: var(--text);
+    outline: none;
+    border: 1px solid var(--textLight);
+    width: max-content;
+    cursor: pointer;
+  }
+
+  .button:hover, .btnPO:hover {
+    background-color: var(--iconHoverSec);
+    color: var(--text);
+  }
+
+  .expand { 
+    display: flex;
+    width: 100%;
+    gap: 10px; 
+    padding: 5px;
+    outline: 2px solid var(--iconHover);
+    border-radius: 5px;
+    background-color: var(--bgLight);
+    height: 450px;
+    overflow-y: auto;
+    line-height: 1.7;
+  }
+
+  .cXML {
+    padding: 10px;
+    flex: 1;
+    max-height: 410px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    text-align: justify;
+    background-color: var(--bgLight);
+    border-radius: 5px;
+    line-height: 1.7;
+  }
+/* WebKit Browsers (Chrome, Safari) */
+.expand::-webkit-scrollbar {
+    width: 12px; /* Width of the scrollbar */
+  }
+  
+  .expand::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Background of the scrollbar track */
+    border-radius: 5px; /* Rounded corners for the track */
+  }
+  
+  .expand::-webkit-scrollbar-thumb {
+    background: var(--iconHover); /* Color of the scroll thumb */
+    border-radius: 5px; /* Rounded corners for the thumb */
+  }
+  
+  .expand::-webkit-scrollbar-thumb:hover {
+    background: var(--iconHoverSec); /* Color of the scroll thumb when hovered */
+  }
+/* Target nested tags with increased padding for indentation */
+
+  .title {
+    max-width: 100%;
+    background-color: var(--bgLight);
+    padding: 5px;
+    border-radius: 5px;
+    background-color: var(--iconHover);
+    
+  }
+  .cartInfo {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    font-size: 15px;
+    color: var(--text);
+    font-weight: 400;
+    gap: 10px;
+  }
+  .payload {
+    font-size: 15px;
+    color: var(--text);
+    font-weight: 400;
+
+  }
+  .timestamp {
+    font-size: 15px;
+    color: var(--text);
+    font-weight: 400;
+  }
+  
+
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    color: var(--textLight);
+    margin-top: 20px;
+    border-radius: 5px;
+  }
+
+  .thTitles {
+    font-size: 14px;
+    font-family: inherit;
+    
+    color: var(--textLight);
+    text-align: center;
+    
+  }
+  
+  .table th, .table td {
+    border: 1px solid var(--textLight);
+    padding: 8px;
+    text-align: left;
+  }
+
+  .table td {
+    font-weight: 400;
+    color: var(--text);
+  }
+  
+  .table th {
+    background-color: var(--bgWhite);
+
+  }
+
+
+.table tr:nth-child(even) {
+    background-color: var(--bgWhite);
+}
+
+.table tr:hover {
+    background-color: var(--iconHover);
+}
+
+.table td:last-child {
+    text-align: right;
+}
+
+
+.totalPrice {
+    margin-top: 20px;
+    font-weight: 500;
+    color: var(--text);
+}
+
+.btnContainer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.btnPO {
+  border: 1px solid var(--textLight);
+  padding: 10px 50px;
+  background-color: var(--iconHover);
+  color: var(--text);
+  border-radius: 5px;
+  font-weight: 400;
+  font-size: 15px;
+}
+
+.infoBox{
+   display: flex;
+   gap: 10px;
+   padding: 10px;
+   align-items: center;
+   background-color: var(--iconHover);
+   border-radius: 5px;
+   font-weight: 400;
+}

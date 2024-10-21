@@ -1,0 +1,156 @@
+.container{
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.errorMessage {
+    display: flex;
+    background-color: var(--warn);
+    padding: 5px;
+    font-weight: 400;
+    font-size: 14px;
+    width: fit-content;
+    border-radius: 5px;
+    color: var(--text);
+}
+
+.successMessage {
+    display: flex;
+    background-color: var(--success);
+    padding: 5px;
+    font-weight: 400;
+    font-size: 14px;
+    width: fit-content;
+    border-radius: 5px;
+    color: var(--text);
+}
+
+.inputsPunchout{
+    display: flex;
+    gap: 10px;
+    background-color: var(--bgLight);
+    width: 98%;
+    padding: 5px 10px;
+    border-radius: 10px;
+}
+.inputs {
+    display: flex;
+    gap: 10px;
+    background-color: var(--bgLight);
+    width: 50%;
+    padding: 5px 10px;
+    border-radius: 10px;
+}
+.label {
+    min-width: 130px
+}
+.inputPunchout{
+    border-radius: 10px;
+    padding: 3px 10px;
+    border: none;
+    width: 100%;
+}
+.input {
+    border-radius: 10px;
+    padding: 3px 10px;
+    border: none;
+    width: 100%;
+}
+.input:focus, .inputPunchout:focus {
+    outline: 1px solid var(--iconHover)
+}
+
+.customParams {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.customInputs {
+    display: flex;
+    background-color: var(--bgLight);
+    width: 50%;
+    padding: 5px 10px;
+    border-radius: 10px;
+    gap: 10px;
+    align-items: center;
+}
+.customLabel {
+    min-width: 100px;
+}
+
+.removeBtn {
+    background-color: var(--warn);
+    border-radius: 60%;
+}
+.addBtn {
+    background-color: var(--success);
+    border-radius: 60%;
+    font-weight: 400;
+}
+.btnContainerAR {
+    display: flex;
+    gap: 5px;
+}
+
+.plusBtn {
+    display: flex;
+    width: max-content;
+    padding: 5px 10px;
+    margin-top: 10px;
+    background-color: var(--iconHover);
+    border: 1px solid var(--textLight);
+    border-radius: 5px;
+}
+
+.plusBtn:hover {
+    background-color: var(--iconHoverSec);
+}
+.span {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    margin: 15px 0;
+}
+
+.disabled {
+    background-color: #e0e0e0;
+    cursor: not-allowed;
+}
+
+.hr {
+    flex: 1;
+    border-bottom: 1px solid var(--textLight);
+}
+
+.btnContainer {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn {
+    padding: 5px 60px;
+    border: 3px solid var(--iconHover);
+    border-radius: 10px;
+    cursor: pointer;
+    color: var(--textLight);
+    background-color: var(--bgLight);
+}
+
+.btn:hover {
+    background-color: var(--iconHover);
+    color: var(--text);
+}
+
+.inputs:hover, .inputsPunchout:hover {
+    box-shadow: 0 0 10px var(--iconHover);
+}
