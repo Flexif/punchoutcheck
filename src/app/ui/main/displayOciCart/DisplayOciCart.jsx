@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState, Suspense } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import JSONPretty from 'react-json-pretty'; // For raw JSON display
 import styles from './displayOciCart.module.css'; // Assuming styles are the same or similar to DisplayCxmlCart
@@ -25,7 +25,6 @@ const DisplayOciCart = () => {
       padding: 1em;
       font-size: 14px;
       min-width: 100%;
-      
     `,
     error: `
       color: var(--warn); 
@@ -46,6 +45,7 @@ const DisplayOciCart = () => {
       color: var(--success);
     `,
   };
+
   const handleInfoMessage = () => {
     setInfoMessage('A Purchase Order is created if you have a Punchout Order Request license.');
     setTimeout(() => { setInfoMessage('') }, 10000);
@@ -55,7 +55,6 @@ const DisplayOciCart = () => {
     setDisplayInfo(prev => !prev);
   };
 
- 
   useEffect(() => {
     const fetchData = async () => {
       if (cartId) {
@@ -108,51 +107,49 @@ const DisplayOciCart = () => {
     : 0;
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <div className={styles.container}>
-        <button className={styles.button} onClick={handleDisplayButton}>
-          {displayInfo ? <IoChevronUpCircleOutline size={23} /> : <MdOutlineExpandCircleDown size={23} />} Shopping Cart Details
-        </button>
-        {displayInfo ? (
-          <div className={styles.expand}>
-            <JSONPretty data={cartData} theme={customTheme} />
-          </div>
-        ) : null}
+    <div className={styles.container}>
+      <button className={styles.button} onClick={handleDisplayButton}>
+        {displayInfo ? <IoChevronUpCircleOutline size={23} /> : <MdOutlineExpandCircleDown size={23} />} Shopping Cart Details
+      </button>
+      {displayInfo ? (
+        <div className={styles.expand}>
+          <JSONPretty data={cartData} theme={customTheme} />
+        </div>
+      ) : null}
 
-        <div>
-          <h4>Items</h4>
-          <table className={styles.table}>
-            <thead>
-              <tr>
-                {uniqueKeys.map((key, index) => (
-                  <th key={index} className={styles.thTitles}>
-                    {key.replace('NEW_ITEM-', '')}
-                  </th>
+      <div>
+        <h4>Items</h4>
+        <table className={styles.table}>
+          <thead>
+            <tr>
+              {uniqueKeys.map((key, index) => (
+                <th key={index} className={styles.thTitles}>
+                  {key.replace('NEW_ITEM-', '')}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {Array.from({ length: numItems }).map((_, itemIndex) => (
+              <tr key={itemIndex}>
+                {uniqueKeys.map((key, keyIndex) => (
+                  <td key={keyIndex}>{cartData[key]?.[itemIndex] || 'N/A'}</td>
                 ))}
               </tr>
-            </thead>
-            <tbody>
-              {Array.from({ length: numItems }).map((_, itemIndex) => (
-                <tr key={itemIndex}>
-                  {uniqueKeys.map((key, keyIndex) => (
-                    <td key={keyIndex}>{cartData[key]?.[itemIndex] || 'N/A'}</td>
-                  ))}
-                </tr>
-              ))}
-              <tr>
-                <td colSpan={uniqueKeys.length - 1} className={styles.totalPrice}>Total Cart Price</td>
-                <td><strong>{totalCartPrice.toFixed(2)} {cartData['NEW_ITEM-CURRENCY']?.[0] || ''}</strong></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div className={styles.btnContainer}>
-          <button className={styles.btnPO} onClick={handleInfoMessage}>Create PO</button>
-        </div>
-        {infoMessage ? <div className={styles.infoBox}><FcInfo />{infoMessage}</div> : ''}
+            ))}
+            <tr>
+              <td colSpan={uniqueKeys.length - 1} className={styles.totalPrice}>Total Cart Price</td>
+              <td><strong>{totalCartPrice.toFixed(2)} {cartData['NEW_ITEM-CURRENCY']?.[0] || ''}</strong></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-    </Suspense>
+
+      <div className={styles.btnContainer}>
+        <button className={styles.btnPO} onClick={handleInfoMessage}>Create PO</button>
+      </div>
+      {infoMessage ? <div className={styles.infoBox}><FcInfo />{infoMessage}</div> : ''}
+    </div>
   );
 };
 
