@@ -1,8 +1,9 @@
+
 'use client';
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import JSONPretty from 'react-json-pretty'; // For raw JSON display
-import styles from './displayOciCart.module.css'; // Assuming styles are the same or similar to DisplayCxmlCart
+import JSONPretty from 'react-json-pretty';
+import styles from './displayOciCart.module.css';
 import { MdOutlineExpandCircleDown } from "react-icons/md";
 import { IoChevronUpCircleOutline } from "react-icons/io5";
 import { FcInfo } from "react-icons/fc";
@@ -18,32 +19,12 @@ const DisplayOciCart = () => {
   const cartId = searchParams.get('id');
 
   const customTheme = {
-    main: `
-      line-height: 1.7;
-      color: var(--textLight); 
-      overflow: auto;
-      padding: 1em;
-      font-size: 14px;
-      min-width: 100%;
-    `,
-    error: `
-      color: var(--warn); 
-      background-color: var(--bgSec);
-    `,
-    key: `
-      color: var(--textLight);
-      font-weight: 400;
-    `,
-    string: `
-      color: var(--text);
-      font-weight: 500;
-    `,
-    value: `
-      color: var(--iconHover);
-    `,
-    boolean: `
-      color: var(--success);
-    `,
+    main: `line-height: 1.7; color: var(--textLight); overflow: auto; padding: 1em; font-size: 14px; min-width: 100%;`,
+    error: `color: var(--warn); background-color: var(--bgSec);`,
+    key: `color: var(--textLight); font-weight: 400;`,
+    string: `color: var(--text); font-weight: 500;`,
+    value: `color: var(--iconHover);`,
+    boolean: `color: var(--success);`,
   };
 
   const handleInfoMessage = () => {
@@ -56,20 +37,26 @@ const DisplayOciCart = () => {
   };
 
   useEffect(() => {
+    
     const fetchData = async () => {
+      if (!cartId) {
+        setLoading(false);
+        return; // Early return if there's no cartId
+      }
+
       if (cartId) {
         try {
           const response = await fetch(`${backendURL}/api/oci-data/${cartId}`);
           if (response.ok) {
             const data = await response.json();
-            console.log("cartData", data);
-            setCartData(data.data); // Set OCI cart data for display
+            console.log("Fetched cart data:", data);
+            setCartData(data.data);
           } else {
-            setError('Failed to fetch data');
+            setError(`Failed to fetch data: ${response.statusText}`);
           }
         } catch (fetchError) {
           console.error('Fetch Error:', fetchError);
-          setError('Failed to fetch data');
+          setError(`Failed to fetch data: ${fetchError.message}`);
         } finally {
           setLoading(false);
         }
@@ -93,11 +80,9 @@ const DisplayOciCart = () => {
     return <div className={styles.container}>No data found.</div>;
   }
 
-  // Extract unique keys dynamically for all items
   const uniqueKeys = Object.keys(cartData);
-  const numItems = cartData[uniqueKeys[0]].length;
+  const numItems = cartData[uniqueKeys[0]].length || 0;
 
-  // Calculate total cart price (assuming 'NEW_ITEM-PRICE' and 'NEW_ITEM-QUANTITY' exist)
   const totalCartPrice = uniqueKeys.includes('NEW_ITEM-PRICE') && uniqueKeys.includes('NEW_ITEM-QUANTITY')
     ? cartData['NEW_ITEM-PRICE'].reduce((total, price, index) => {
         const quantity = parseFloat(cartData['NEW_ITEM-QUANTITY'][index]);
@@ -111,11 +96,11 @@ const DisplayOciCart = () => {
       <button className={styles.button} onClick={handleDisplayButton}>
         {displayInfo ? <IoChevronUpCircleOutline size={23} /> : <MdOutlineExpandCircleDown size={23} />} Shopping Cart Details
       </button>
-      {displayInfo ? (
+      {displayInfo && (
         <div className={styles.expand}>
           <JSONPretty data={cartData} theme={customTheme} />
         </div>
-      ) : null}
+      )}
 
       <div>
         <h4>Items</h4>
@@ -148,7 +133,7 @@ const DisplayOciCart = () => {
       <div className={styles.btnContainer}>
         <button className={styles.btnPO} onClick={handleInfoMessage}>Create PO</button>
       </div>
-      {infoMessage ? <div className={styles.infoBox}><FcInfo />{infoMessage}</div> : ''}
+      {infoMessage && <div className={styles.infoBox}><FcInfo />{infoMessage}</div>}
     </div>
   );
 };

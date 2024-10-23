@@ -1,3 +1,4 @@
+'use client';
 import MenuLinks from './menuLinks/MenuLinks';
 import styles from './navbar.module.css';
 import { v4 as uuid } from 'uuid';
@@ -19,13 +20,13 @@ const Navbar = () => {
     },
     {
       id: uuid(), // Assign a UUID to each object
-      title: 'cXML test',
+      title: 'cXML Punchout',
       path: '/main/cxml-test-tool',
       icon: <HiOutlineCodeBracketSquare size={25}/>
     },
     {
       id: uuid(),
-      title: 'OCI test',
+      title: 'OCI Punchout',
       path: '/main/oci-test-tool',
       icon: <PiArrowSquareRightLight size={25}/>
     },

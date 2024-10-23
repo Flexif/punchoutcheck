@@ -1,6 +1,6 @@
-import Image from 'next/image'
+'use client';
 import styles from './hero.module.css'
-import Link from 'next/link'
+
 
 const Hero = () => {
   return (

@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import styles from './ociTestTool.module.css';
 import { CiCircleRemove } from "react-icons/ci";
 
+
 const OciTestTool = () => {
   const backendURL = process.env.NEXT_PUBLIC_BACKEND_BASE_URL || '';
   const [errorMessage, setErrorMessage] = useState('');
@@ -143,7 +144,13 @@ const OciTestTool = () => {
     if (formData.baseURL) {
       debouncedExtractParamsFromURL(formData.baseURL);
     } else {
-      handleReset();
+      // Reset only if the previous value was not an empty string
+      setFormData((prevData) => {
+        if (prevData.baseURL !== '') {
+          handleReset();
+        }
+        return prevData; // Return the current state
+      });
     }
   }, [formData.baseURL, debouncedExtractParamsFromURL]);
 

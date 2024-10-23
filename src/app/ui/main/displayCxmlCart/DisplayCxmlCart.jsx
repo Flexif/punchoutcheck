@@ -1,15 +1,16 @@
-'use client';
+'use client'; // Ensure this component is treated as a client component
 import React, { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import styles from './displayCxmlCart.module.css';
-import XMLViewer from 'react-xml-viewer';
 import { MdOutlineExpandCircleDown } from "react-icons/md";
 import { IoChevronUpCircleOutline } from "react-icons/io5";
 import { FcInfo } from "react-icons/fc";
+import dynamic from 'next/dynamic';
+
+// Dynamic import for XMLViewer to avoid SSR issues
+const XMLViewer = dynamic(() => import('react-xml-viewer'), { ssr: false });
 
 const DisplayCxmlCart = () => {
-  const searchParams = useSearchParams();
-  const xmlDocId = searchParams.get('xmlDocId');
   const backendURL = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
   const [infoMessage, setInfoMessage] = useState('');
   const [displayInfo, setDisplayInfo] = useState(false);
@@ -18,16 +19,18 @@ const DisplayCxmlCart = () => {
   const [jsonData, setJsonData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const searchParams = useSearchParams();
+  const [xmlDocId, setXmlDocId] = useState(null);
 
-  // XML Viewer custom theme
+  // Custom theme for XMLViewer
   const customTheme = {
-    attributeKeyColor: 'var(--text)',
-    attributeValueColor: 'navy',
-    cdataColor: 'var(--textLight)',
-    commentColor: 'var(--textLight)',
-    separatorColor: 'var(--textLight)',
-    tagColor: 'var(--text)',
-    textColor: 'red',
+    attributeKeyColor: 'var(--text)', // Using --iconHover for attribute keys
+    attributeValueColor: 'navy', // Using --text for attribute values
+    cdataColor: 'var(--textLight)', // Using --textLight for CDATA
+    commentColor: 'var(--textLight)', // Using --textLight for comments
+    separatorColor: 'var(--textLight)', // Using --textLight for separators
+    tagColor: 'var(--text)', // Using --text for tag names
+    textColor: 'red', // Using --text for text content
   };
 
   const handleDisplayButton = () => {
@@ -44,9 +47,23 @@ const DisplayCxmlCart = () => {
     setTimeout(() => { setInfoMessage('') }, 10000);
   };
 
-  // Function to fetch data from backend
-  const fetchData = async () => {
-    if (xmlDocId) {
+  // Set xmlDocId from searchParams when it changes
+  useEffect(() => {
+    const id = searchParams.get('xmlDocId');
+    if (id) {
+      setXmlDocId(id);
+    }
+  }, [searchParams]);
+
+  // Fetch data based on xmlDocId
+  useEffect(() => {
+    const fetchData = async () => {
+      if (xmlDocId === null) {
+        setLoading(false);
+        return; // Early return if there's no xmlDocId
+      }
+      
+      setLoading(true); // Start loading
       try {
         const response = await fetch(`${backendURL}/api/cxml-data/${xmlDocId}`);
         if (response.ok) {
@@ -60,17 +77,14 @@ const DisplayCxmlCart = () => {
         console.error('Fetch Error:', fetchError);
         setError('Failed to fetch data');
       } finally {
-        setLoading(false);
+        setLoading(false); // End loading
       }
-    } else {
-      setLoading(false);
-    }
-  };
+    };
 
-  useEffect(() => {
     fetchData();
-  }, [xmlDocId, backendURL]);
+  }, [xmlDocId, backendURL]); // Fetch data when xmlDocId changes
 
+  // Conditional rendering based on loading and error states
   if (loading) {
     return <div className={styles.container}>Loading...</div>;
   }
@@ -93,15 +107,15 @@ const DisplayCxmlCart = () => {
   // Calculate total cart price
   const totalCartPrice = items.reduce((total, item) => {
     const quantity = parseFloat(item.$.quantity);
-    const unitPrice = parseFloat(item.ItemDetail[0].UnitPrice[0].Money[0]._); // Assume Money always has a value
+    const unitPrice = parseFloat(item.ItemDetail[0].UnitPrice[0].Money[0]._); // Note: Adjust if structure is different
     return total + (quantity * unitPrice);
   }, 0);
 
   return (
     <div className={styles.container}>
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<div>Loading cart details...</div>}>
         <button className={styles.button} onClick={handleDisplayButton}>
-          {displayInfo ? <IoChevronUpCircleOutline size={23} /> : <MdOutlineExpandCircleDown size={23} />}  Shopping Cart Details
+          {displayInfo ? <IoChevronUpCircleOutline size={23} /> : <MdOutlineExpandCircleDown size={23} />} Shopping Cart Details
         </button>
         {displayInfo && (
           <div className={styles.expand}>
@@ -160,7 +174,7 @@ const DisplayCxmlCart = () => {
             <tbody>
               {items.map((item, index) => {
                 const quantity = parseFloat(item.$.quantity);
-                const unitPrice = parseFloat(item.ItemDetail[0].UnitPrice[0].Money[0]._);
+                const unitPrice = parseFloat(item.ItemDetail[0].UnitPrice[0].Money[0]._); // Ensure this matches the XML structure
                 const totalPrice = quantity * unitPrice;
 
                 return (

@@ -1,10 +1,12 @@
-import CxmlTestTool from '@/app/ui/main/cxmlTestTool/CxmlTestTool'
-import React from 'react'
+import CxmlTestTool from '@/app/ui/main/cxmlTestTool/CxmlTestTool';
+import React from 'react';
 
-const cxmlTestPage = () => {
+const CxmlTestPage = () => {
   return (
-    <div><CxmlTestTool/></div>
-  )
-}
+    <div>
+      <CxmlTestTool />
+    </div>
+  );
+};
 
-export default cxmlTestPage
+export default CxmlTestPage;

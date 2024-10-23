@@ -1,10 +1,12 @@
-import DisplayOciCart from '@/app/ui/main/displayOciCart/DisplayOciCart';
+import React, { Suspense } from 'react'; // Import Suspense from React
+import DisplayOciCart from "@/app/ui/main/displayOciCart/DisplayOciCart";
 
-
-const OciCartpage = () => {
+const DisplayOciCartPage = () => {
   return (
-    <div><DisplayOciCart/></div>
-  )
-}
+    <Suspense fallback={<div>Loading...</div>}> {/* Add Suspense wrapper */}
+      <DisplayOciCart />
+    </Suspense>
+  );
+};
 
-export default OciCartpage
+export default DisplayOciCartPage;

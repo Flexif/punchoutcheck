@@ -1,10 +1,11 @@
-import CheckIframe from '@/app/ui/main/checkIframe/CheckIframe'
-import React from 'react'
+import CheckIframe from "@/app/ui/main/checkIframe/CheckIframe";
 
 const CheckIframePage = () => {
   return (
-    <CheckIframe/>
-  )
-}
+    <div>
+      <CheckIframe />
+    </div>
+  );
+};
 
-export default CheckIframePage
+export default CheckIframePage;

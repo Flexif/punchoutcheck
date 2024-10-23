@@ -1,10 +1,12 @@
-import OciTestTool from '@/app/ui/main/ociTestTool/OciTestTool'
-import React from 'react'
+import OciTestTool from '@/app/ui/main/ociTestTool/OciTestTool';
+import React from 'react';
 
-const ociTestPage = () => {
+const OciTestPage = () => {
   return (
-    <div><OciTestTool/></div>
-  )
-}
+    <div>
+      <OciTestTool/>
+    </div>
+  );
+};
 
-export default ociTestPage
+export default OciTestPage;

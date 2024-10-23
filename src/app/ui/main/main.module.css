@@ -4,10 +4,13 @@
     height: 100vh;
 }
 .navbar {
+    display: flex;
+    justify-content: center;
+    width: 100%;
     padding: 10px 20px;
     flex: 0.5;
     background-color: var(--bgLight);
-    border-bottom: 1px solid var(--iconHover);
+    box-shadow: 0 0 5px 3px var(--iconHover);
     border-bottom-right-radius: 150px ;
     border-bottom-left-radius: 150px ;
 }
