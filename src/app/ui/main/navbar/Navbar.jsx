@@ -13,51 +13,51 @@ const Navbar = () => {
 
   const navbarLinks = [
     {
-      id: uuid(), // Assign a UUID to each object
-      title: 'Main',
-      path: '/main',
-      icon: <RiHomeLine size={25}/>
+      id: uuid(),
+      title: 'Home', // Updated title for clarity
+      path: '/', // Changed to root path
+      icon: <RiHomeLine size={25} />
     },
     {
-      id: uuid(), // Assign a UUID to each object
+      id: uuid(),
       title: 'cXML Punchout',
-      path: '/main/cxml-test-tool',
-      icon: <HiOutlineCodeBracketSquare size={25}/>
+      path: '/cxml-test-tool', // Changed to reflect new structure
+      icon: <HiOutlineCodeBracketSquare size={25} />
     },
     {
       id: uuid(),
       title: 'OCI Punchout',
-      path: '/main/oci-test-tool',
-      icon: <PiArrowSquareRightLight size={25}/>
+      path: '/oci-test-tool', // Changed to reflect new structure
+      icon: <PiArrowSquareRightLight size={25} />
     },
     {
       id: uuid(),
       title: 'Check Headers',
-      path: '/main/check-headers',
-      icon: <CiViewList size={25}/>
+      path: '/check-headers', // Changed to reflect new structure
+      icon: <CiViewList size={25} />
     },
     {
       id: uuid(),
       title: 'Iframe Test',
-      path: '/main/check-iframe',
-      icon: <PiFrameCorners size={25}/>
+      path: '/check-iframe', // Changed to reflect new structure
+      icon: <PiFrameCorners size={25} />
     }
   ];
-  
+
   return (
     <div className={styles.container}>
       <div className={styles.logo}>
         <div className={styles.logoContainer}>
-          <Image src='/Vurbis.png' width={45} height={38} alt='logo' className={styles.img}/>
-          </div>
+          <Image src='/punchout.png' width={50} height={50} alt='logo' className={styles.img} />
+        </div>
       </div>
       <div className={styles.links}>
-        {navbarLinks.map((link)=>(
-          <MenuLinks link={link} key={link.id} className={styles.title}/>
+        {navbarLinks.map((link) => (
+          <MenuLinks link={link} key={link.id} className={styles.title} />
         ))}
       </div>
     </div>
   )
 }
 
-export default Navbar
+export default Navbar;

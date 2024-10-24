@@ -9,7 +9,7 @@
 .logoContainer {
     display: flex;
     background-color: var(--bgColor);
-    outline: 5px solid var(--iconHover);
+    outline: 6px solid var(--iconHover);
     border-radius: 50%;
     min-height: 4px;
     min-width: 40px;
