@@ -2,13 +2,9 @@
 import React, { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import styles from './displayCxmlCart.module.css';
-import { MdOutlineExpandCircleDown } from "react-icons/md";
-import { IoChevronUpCircleOutline } from "react-icons/io5";
-import { FcInfo } from "react-icons/fc";
-import dynamic from 'next/dynamic';
-
-// Dynamic import for XMLViewer to avoid SSR issues
-const XMLViewer = dynamic(() => import('react-xml-viewer'), { ssr: false });
+import { MdOutlineExpandCircleDown } from 'react-icons/md';
+import { IoChevronUpCircleOutline } from 'react-icons/io5';
+import { FcInfo } from 'react-icons/fc';
 
 const DisplayCxmlCart = () => {
   const backendURL = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
@@ -22,15 +18,14 @@ const DisplayCxmlCart = () => {
   const searchParams = useSearchParams();
   const [xmlDocId, setXmlDocId] = useState(null);
 
-  // Custom theme for XMLViewer
   const customTheme = {
     attributeKeyColor: 'var(--text)', // Using --iconHover for attribute keys
-    attributeValueColor: 'navy', // Using --text for attribute values
+    attributeValueColor: '#a80000', // Using --text for attribute values
     cdataColor: 'var(--textLight)', // Using --textLight for CDATA
     commentColor: 'var(--textLight)', // Using --textLight for comments
     separatorColor: 'var(--textLight)', // Using --textLight for separators
     tagColor: 'var(--text)', // Using --text for tag names
-    textColor: 'red', // Using --text for text content
+    textColor: '#0062ff', // Using --text for text content
   };
 
   const handleDisplayButton = () => {
@@ -43,8 +38,12 @@ const DisplayCxmlCart = () => {
   };
 
   const handleInfoMessage = () => {
-    setInfoMessage('A Purchase Order is created if you have a Punchout Order Request license.');
-    setTimeout(() => { setInfoMessage('') }, 10000);
+    setInfoMessage(
+      'A Purchase Order is created if you have a Punchout Order Request license.'
+    );
+    setTimeout(() => {
+      setInfoMessage('');
+    }, 10000);
   };
 
   // Set xmlDocId from searchParams when it changes
@@ -62,13 +61,13 @@ const DisplayCxmlCart = () => {
         setLoading(false);
         return; // Early return if there's no xmlDocId
       }
-      
+
       setLoading(true); // Start loading
       try {
         const response = await fetch(`${backendURL}/api/cxml-data/${xmlDocId}`);
         if (response.ok) {
           const data = await response.json();
-          setXmlData(data.xml);  // Set raw XML data for display
+          setXmlData(data.xml); // Set raw XML data for display
           setJsonData(data.json); // Set parsed JSON data for table
         } else {
           setError('Failed to fetch data');
@@ -102,20 +101,102 @@ const DisplayCxmlCart = () => {
   const buyerDomain = cXML.Header[0].To[0].Credential[0].$.domain;
   const message = cXML.Message[0].PunchOutOrderMessage[0];
   const items = message.ItemIn;
-  const currencySymbol = message.PunchOutOrderMessageHeader[0].Total[0].Money[0].$?.currency || "";
+  const currencySymbol =
+    message.PunchOutOrderMessageHeader[0].Total[0].Money[0].$?.currency || '';
 
   // Calculate total cart price
   const totalCartPrice = items.reduce((total, item) => {
     const quantity = parseFloat(item.$.quantity);
     const unitPrice = parseFloat(item.ItemDetail[0].UnitPrice[0].Money[0]._); // Note: Adjust if structure is different
-    return total + (quantity * unitPrice);
+    return total + quantity * unitPrice;
   }, 0);
+
+  // Function to convert XML to JSX
+  const xmlToJSX = (node, index = 0, level = 0) => {
+    if (node.nodeType === Node.ELEMENT_NODE) {
+      const tagName = node.nodeName;
+      const attributes = Array.from(node.attributes);
+      const children = Array.from(node.childNodes);
+
+      return (
+        <div key={`${tagName}-${index}`} style={{ marginLeft: `${level * 10}px` }}>
+          {/* Opening tag */}
+          <span className={styles.tag} style={{ color: customTheme.tagColor }}>
+            &lt;{tagName}
+          </span>
+          {/* Attributes */}
+          {attributes.map((attr) => (
+            <span
+              key={`${tagName}-${index}-${attr.name}`}
+              className={styles.attribute}
+              style={{ color: customTheme.attributeKeyColor }}
+            >
+              {` ${attr.name}="`}
+              <span className={styles.attributeValue} style={{ color: customTheme.attributeValueColor }}>
+                {attr.value}
+              </span>
+              {'"'}
+            </span>
+          ))}
+          <span className={styles.tag} style={{ color: customTheme.tagColor }}>
+            &gt;
+          </span>
+
+          {/* Children */}
+          {children.length === 0 ? (
+            // Self-closing tag for empty elements
+            <span style={{ color: customTheme.textColor }}>/&lt;{tagName}&gt;</span>
+          ) : (
+            <div>
+              {/* If there are text nodes or other child elements, ensure proper spacing */}
+              {children.map((child, childIndex) => {
+                // If the child is a text node, render it correctly
+                if (child.nodeType === Node.TEXT_NODE) {
+                  const trimmedText = child.nodeValue.trim();
+                  return (
+                    trimmedText && (
+                      <div key={`${trimmedText}-${childIndex}`} style={{ color: customTheme.textColor, marginLeft: `${(level ) * 5}px` }}>
+                        {trimmedText}
+                      </div>
+                    )
+                  );
+                }
+                return xmlToJSX(child, childIndex, level + 1);
+              })}
+              {/* Closing tag */}
+              <span className={styles.tagName} style={{ color: customTheme.tagColor }}>
+                &lt;/{tagName}&gt;
+              </span>
+            </div>
+          )}
+        </div>
+      );
+    } else if (node.nodeType === Node.TEXT_NODE) {
+      // Handle text nodes directly, but ensure they are trimmed
+      const trimmedText = node.nodeValue.trim();
+      return (
+        trimmedText && (
+          <div className={styles.textValue} style={{ color: customTheme.textColor, marginLeft: `${level * 20}px` }} key={`${trimmedText}-${index}`}>
+            {trimmedText}
+          </div>
+        )
+      );
+    }
+
+    return null; // Ignore other node types
+  };
+
 
   return (
     <div className={styles.container}>
       <Suspense fallback={<div>Loading cart details...</div>}>
         <button className={styles.button} onClick={handleDisplayButton}>
-          {displayInfo ? <IoChevronUpCircleOutline size={23} /> : <MdOutlineExpandCircleDown size={23} />} Shopping Cart Details
+          {displayInfo ? (
+            <IoChevronUpCircleOutline size={23} />
+          ) : (
+            <MdOutlineExpandCircleDown size={23} />
+          )}{' '}
+          Shopping Cart Details
         </button>
         {displayInfo && (
           <div className={styles.expand}>
@@ -123,29 +204,42 @@ const DisplayCxmlCart = () => {
               <div className={styles.supplier}>
                 <p className={styles.title}>Supplier headers</p>
                 <p>Credentials: {supplierDomain}</p>
-                <p>Supplier Identity: {cXML.Header[0].From[0].Credential[0].Identity[0]}</p>
+                <p>
+                  Supplier Identity:{' '}
+                  {cXML.Header[0].From[0].Credential[0].Identity[0]}
+                </p>
               </div>
               <div className={styles.buyer}>
                 <p className={styles.title}>Buyers headers</p>
                 <p>Credentials: {buyerDomain}</p>
-                <p>Buyer Identity: {cXML.Header[0].To[0].Credential[0].Identity[0]}</p>
+                <p>
+                  Buyer Identity:{' '}
+                  {cXML.Header[0].To[0].Credential[0].Identity[0]}
+                </p>
               </div>
               <div className={styles.sender}>
                 <p className={styles.title}>Sender headers</p>
-                <p>Sender Identity: {cXML.Header[0].Sender[0].Credential[0].Identity[0]}</p>
+                <p>
+                  Sender Identity:{' '}
+                  {cXML.Header[0].Sender[0].Credential[0].Identity[0]}
+                </p>
                 <p>User Agent: {cXML.Header[0].Sender[0].UserAgent[0]}</p>
               </div>
               <div className={styles.cartInfo}>
                 <p className={styles.title}>cXML details</p>
-                <div className={styles.payload}>Payload ID: {cXML.$.payloadID}</div>
-                <div className={styles.timestamp}>Timestamp: {cXML.$.timestamp}</div>
+                <div className={styles.payload}>
+                  Payload ID: {cXML.$.payloadID}
+                </div>
+                <div className={styles.timestamp}>
+                  Timestamp: {cXML.$.timestamp}
+                </div>
               </div>
             </div>
-            <div className={styles.cXMLContainer} onClick={handleDisplayXML}>
+            <div className={styles.cXMLContainer} onDoubleClick={handleDisplayXML}>
               {displayXML ? (
-                <div className={styles.cXML}>
-                  <XMLViewer xml={xmlData} theme={customTheme} />
-                </div>
+                <pre className={styles.cXML}>
+                     {xmlToJSX(new DOMParser().parseFromString(xmlData, 'application/xml').documentElement)}
+                </pre>
               ) : (
                 <button className={styles.cXMLButton}>
                   <MdOutlineExpandCircleDown size={23} />
@@ -174,7 +268,9 @@ const DisplayCxmlCart = () => {
             <tbody>
               {items.map((item, index) => {
                 const quantity = parseFloat(item.$.quantity);
-                const unitPrice = parseFloat(item.ItemDetail[0].UnitPrice[0].Money[0]._); // Ensure this matches the XML structure
+                const unitPrice = parseFloat(
+                  item.ItemDetail[0].UnitPrice[0].Money[0]._
+                ); // Ensure this matches the XML structure
                 const totalPrice = quantity * unitPrice;
 
                 return (
@@ -191,17 +287,30 @@ const DisplayCxmlCart = () => {
                 );
               })}
               <tr>
-                <td colSpan="7" className={styles.totalPrice}>Total Cart Price</td>
-                <td><strong>{totalCartPrice.toFixed(2)} {currencySymbol}</strong></td>
+                <td colSpan="7" className={styles.totalPrice}>
+                  Total Cart Price
+                </td>
+                <td>
+                  <strong>
+                    {totalCartPrice.toFixed(2)} {currencySymbol}
+                  </strong>
+                </td>
               </tr>
             </tbody>
           </table>
         </div>
 
         <div className={styles.btnContainer}>
-          <button className={styles.btnPO} onClick={handleInfoMessage}>Create PO</button>
+          <button className={styles.btnPO} onClick={handleInfoMessage}>
+            Create PO
+          </button>
         </div>
-        {infoMessage && <div className={styles.infoBox}><FcInfo />{infoMessage}</div>}
+        {infoMessage && (
+          <div className={styles.infoBox}>
+            <FcInfo />
+            {infoMessage}
+          </div>
+        )}
       </Suspense>
     </div>
   );

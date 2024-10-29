@@ -4,7 +4,7 @@ import React from 'react';
 const OciTestPage = () => {
   return (
     <div>
-      <OciTestTool/>
+      <OciTestTool />
     </div>
   );
 };

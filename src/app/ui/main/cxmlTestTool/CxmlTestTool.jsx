@@ -129,7 +129,7 @@ const CxmlTestTool = () => {
       extrinsicUsername: 'PunchoutTestTool',
       extrinsicEmail: 'user@punchottesttool.com',
     });
-    setErrorMessage('');  // Clear any previous error messages on reset
+    setErrorMessage(''); // Clear any previous error messages on reset
   };
 
   const handleSend = async () => {
@@ -144,7 +144,7 @@ const CxmlTestTool = () => {
 
       if (!cxmlPayload) {
         setErrorMessage('cXML Payload is missing');
-        return;  // No need to throw an error, we are handling it with state
+        return; // No need to throw an error, we are handling it with state
       }
 
       // Clear any previous error messages before sending the request
@@ -157,12 +157,17 @@ const CxmlTestTool = () => {
           'Content-Type': 'application/json', // Sending JSON data
           'Session-ID': sessionId, // sending the session id to backend
         },
-        body: JSON.stringify({ cxmlPayload, supplierUrl: formData.supplierUrl.trim() }),
+        body: JSON.stringify({
+          cxmlPayload,
+          supplierUrl: formData.supplierUrl.trim(),
+        }),
       });
 
       // Ensure response is OK
       if (!response.ok) {
-        setErrorMessage(`HTTP Error: ${response.status} ${response.statusText}`);
+        setErrorMessage(
+          `HTTP Error: ${response.status} ${response.statusText}`
+        );
         return;
       }
 
@@ -183,45 +188,51 @@ const CxmlTestTool = () => {
         console.error('URL element not found in the response');
       }
     } catch (error) {
-      setErrorMessage('No response has been received from the following ' + `${formData.supplierUrl}` + '. Please make sure that you have entered a valid punchOut URL.');
+      setErrorMessage(
+        'No response has been received from the following ' +
+          `${formData.supplierUrl}` +
+          '. Please make sure that you have entered a valid punchOut URL.'
+      );
       console.error('Request failed:', error);
     }
   };
 
   const handleTextareaPaste = (event) => {
     event.preventDefault();
-  
+
     // Get pasted data via clipboard API
     const pastedData = event.clipboardData.getData('text');
-  
+
     // Set the pasted data as cxmlPayload
     setCxmlPayload(pastedData);
-  
+
     // Parse the pasted XML data to update the form fields
     try {
       const parser = new DOMParser();
       const xmlDoc = parser.parseFromString(pastedData, 'text/xml');
-  
+
       // Helper function to safely get text content from an XML element
       const getElementText = (selector) => {
         const element = xmlDoc.querySelector(selector);
         return element ? element.textContent : '';
       };
-  
+
       // Helper function to safely get an attribute from an XML element
       const getElementAttribute = (selector, attribute) => {
         const element = xmlDoc.querySelector(selector);
         return element ? element.getAttribute(attribute) : '';
       };
-  
+
       const newFormData = {
         fromDomain: getElementAttribute('From > Credential', 'domain') || '',
         fromIdentity: getElementText('From > Credential > Identity') || '',
         toDomain: getElementAttribute('To > Credential', 'domain') || '',
         toIdentity: getElementText('To > Credential > Identity') || '',
-        senderDomain: getElementAttribute('Sender > Credential', 'domain') || '',
+        senderDomain:
+          getElementAttribute('Sender > Credential', 'domain') || '',
         senderIdentity: getElementText('Sender > Credential > Identity') || '',
-        sharedSecret: getElementText('Sender > Credential > SharedSecret') || '',
+        sharedSecret:
+          getElementText('Sender > Credential > SharedSecret') || '',
         PayloadId: getElementAttribute('cXML', 'payloadID') || '',
         timeStamp: getElementAttribute('cXML', 'timestamp') || '',
         supplierUrl: getElementText('SupplierSetup > URL') || '',
@@ -231,84 +242,81 @@ const CxmlTestTool = () => {
         // Keep the buyerUrl unchanged
         buyerUrl: formData.buyerUrl,
       };
-  
+
       setFormData(newFormData);
     } catch (error) {
       console.error('Error parsing cXML:', error);
       // Optionally log the error, but do not set an error message in the state
     }
   };
-  
 
   return (
     <div className={styles.container}>
-          <div className={styles.inputsPunchout}>
-            <div className={styles.label}>Punchout URL</div>
-            <input
-              className={styles.inputPunchout}
-              type="text"
-              name="supplierUrl"
-              value={formData.supplierUrl}
-              onChange={handleChange}
-              required
-              autoComplete="off"
-            />
-          </div>
-          <div>
-            {errorMessage === '' ? '' : 
-              <div className={styles.errorMessage}>
-                {errorMessage}
-              </div>}
-            </div>
-          <div className={styles.span}>
-            Credentials
-            <div className={styles.hr}></div>
-          </div>
-          <div className={styles.form}>
-            <div className={styles.leftContainer}>
-              {Object.keys(formData)
-                .filter((key) => key !== 'cxmlPayload')
-                .map((key) => (
-                  <div className={styles.inputs} key={key}>
-                    <div className={styles.label}>
-                      {key.split(/(?=[A-Z])/).join(' ')}
-                    </div>
-                    <input
-                      className={styles.input}
-                      type="text"
-                      name={key}
-                      value={formData[key]}
-                      onChange={handleChange}
-                    />
-                  </div>
-                ))}
-            </div>
-            <div className={styles.rightContainer}>
-              <textarea
-                className={styles.textarea}
-                value={cxmlPayload}
-                onChange={(e) => setCxmlPayload(e.target.value)}
-                onPaste={handleTextareaPaste}
-              />
-            </div>
-          </div>
-          <div className={styles.btnContainer}>
-            <button
-              type="button"
-              className={styles.btn}
-              onClick={handleReset}
-            >
-              Reset
-            </button>
-            <button
-              type="button"
-              className={styles.btn}
-              onClick={handleSend}
-              disabled={!formData.supplierUrl.trim()}
-            >
-              Send
-            </button>
-          </div>
+      <div className={styles.inputsPunchout}>
+        <div className={styles.label}>Punchout URL</div>
+        <input
+          className={styles.inputPunchout}
+          type="text"
+          name="supplierUrl"
+          value={formData.supplierUrl}
+          onChange={handleChange}
+          required
+          autoComplete="off"
+          placeholder='Paste your Punchout URL here ...'
+        />
+      </div>
+      <div>
+        {errorMessage === '' ? (
+          ''
+        ) : (
+          <div className={styles.errorMessage}>{errorMessage}</div>
+        )}
+      </div>
+      <div className={styles.span}>
+        Credentials
+        <div className={styles.hr}></div>
+      </div>
+      <div className={styles.form}>
+        <div className={styles.leftContainer}>
+          {Object.keys(formData)
+            .filter((key) => key !== 'cxmlPayload')
+            .map((key) => (
+              <div className={styles.inputs} key={key}>
+                <div className={styles.label}>
+                  {key.split(/(?=[A-Z])/).join(' ')}
+                </div>
+                <input
+                  className={styles.input}
+                  type="text"
+                  name={key}
+                  value={formData[key]}
+                  onChange={handleChange}
+                />
+              </div>
+            ))}
+        </div>
+        <div className={styles.rightContainer}>
+          <textarea
+            className={styles.textarea}
+            value={cxmlPayload}
+            onChange={(e) => setCxmlPayload(e.target.value)}
+            onPaste={handleTextareaPaste}
+          />
+        </div>
+      </div>
+      <div className={styles.btnContainer}>
+        <button type="button" className={styles.btn} onClick={handleReset}>
+          Reset
+        </button>
+        <button
+          type="button"
+          className={styles.btn}
+          onClick={handleSend}
+          disabled={!formData.supplierUrl.trim()}
+        >
+          Send
+        </button>
+      </div>
     </div>
   );
 };

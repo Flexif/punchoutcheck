@@ -1,81 +1,79 @@
-.container{
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 .form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
-.inputsPunchout{
-    display: flex;
-    gap: 10px;
-    background-color: var(--bgLight);
-    width: 70%;
-    padding: 5px 10px;
-    border-radius: 10px;
-    
+.inputsPunchout {
+  display: flex;
+  gap: 10px;
+  background-color: var(--bgLight);
+  width: 70%;
+  padding: 5px 10px;
+  border-radius: 10px;
 }
 
 .label {
-    min-width: 130px
+  min-width: 130px;
 }
 
-.inputPunchout{
-    border-radius: 10px;
-    padding: 3px;
-    border: none;
-    width: 100%;
+.inputPunchout {
+  border-radius: 10px;
+  padding: 3px 10px;
+  border: none;
+  width: 100%;
 }
 
 .inputPunchout:focus {
-    outline: 1px solid var(--iconHover)
+  outline: 1px solid var(--iconHover);
 }
 
 .btnContainer {
-    display: flex;
-    gap: 20px;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
 }
 .info {
-    padding: 5px 10px;
-    background-color: var(--iconHover);
-    color: var(--text);
-    text-align: center;
-    font-weight: 400;
-    border-radius: 5px;
+  padding: 5px 10px;
+  background-color: var(--iconHover);
+  color: var(--text);
+  text-align: center;
+  font-weight: 400;
+  border-radius: 5px;
 }
 
 .btn {
-    margin-top: 100px;
-    padding: 5px 60px;
-    border: 2px solid var(--iconHover);
-    border-radius: 10px;
-    cursor: pointer;
-    color: var(--textLight);
-    background-color: var(--bgLight);
+  margin-top: 100px;
+  padding: 5px 60px;
+  border: 2px solid var(--iconHover);
+  border-radius: 10px;
+  cursor: pointer;
+  color: var(--textLight);
+  background-color: var(--bgLight);
 }
 
 .btn:hover {
-    background-color: var(--iconHover);
-    color: var(--text);
+  background-color: var(--iconHover);
+  color: var(--text);
 }
 
 .inputsPunchout:hover {
-    box-shadow: 0 0 10px var(--iconHover);
+  box-shadow: 0 0 10px var(--iconHover);
 }
 
-
 .errorMessage {
-    display: flex;
-    background-color: var(--warn);
-    padding: 5px;
-    font-weight: 400;
-    font-size: 14px;
-    width: fit-content;
-    border-radius: 5px;
-    color: var(--text);
+  display: flex;
+  background-color: var(--warn);
+  padding: 5px;
+  font-weight: 400;
+  font-size: 14px;
+  width: fit-content;
+  border-radius: 5px;
+  color: var(--text);
 }

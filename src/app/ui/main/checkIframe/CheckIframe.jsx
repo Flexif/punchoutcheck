@@ -9,8 +9,6 @@ const CheckIframe = () => {
   const [iframeUrl, setIframeUrl] = useState('');
   const [iframeLoadError, setIframeLoadError] = useState(false);
 
-  
-  
   const handleInputChange = (e) => {
     setPunchoutURL(e.target.value);
     setErrorMessage(''); // Clear any previous error message
@@ -20,9 +18,9 @@ const CheckIframe = () => {
   const ValidateURL = () => {
     if (!punchoutURL) {
       setErrorMessage('Punchout URL cannot be empty.'); // Set error if URL is empty
-      setTimeout(()=> {
+      setTimeout(() => {
         setErrorMessage('');
-     }, 5000);
+      }, 5000);
       return false;
     }
     try {
@@ -30,26 +28,25 @@ const CheckIframe = () => {
 
       if (urlObject.protocol !== 'http:' && urlObject.protocol !== 'https:') {
         setErrorMessage('Punchout URL must use HTTP or HTTPS.'); // Set error if protocol is not HTTP or HTTPS
-        setTimeout(()=> {
-           setErrorMessage('');
+        setTimeout(() => {
+          setErrorMessage('');
         }, 5000);
         return false;
       }
 
       return true;
     } catch (error) {
-
       setErrorMessage('The Punchout URL must use HTTP or HTTPS protocol.'); // Handle invalid URL format
-      setTimeout(()=> {
+      setTimeout(() => {
         setErrorMessage('');
-     }, 5000);
+      }, 5000);
       return false;
     }
   };
 
   const onBlurHandle = () => {
     ValidateURL();
-  }
+  };
 
   const handleCheckBtn = async () => {
     if (!punchoutURL) {
@@ -59,7 +56,7 @@ const CheckIframe = () => {
     try {
       const objectUrl = new URL(punchoutURL); // Validate the URL
       setIframeUrl(objectUrl.origin); // Set URL for iframe
-      console.log(iframeUrl); 
+      console.log(iframeUrl);
       setErrorMessage(''); // Clear any previous error message
       setIframeLoadError(false); // Reset iframe load error
     } catch (e) {
@@ -93,40 +90,50 @@ const CheckIframe = () => {
             value={punchoutURL}
             onChange={handleInputChange}
             placeholder="Paste your URL here ..."
-            autoComplete='yes'
+            autoComplete="yes"
             onBlur={onBlurHandle}
           />
         </div>
         {iframeUrl && !errorMessage ? (
-        <div className={styles.iframeContainer}>
-          <iframe
-            src={iframeUrl}
-             style={{
-             marginTop: '20px',
-             border: '2px solid #ccc',
-             borderRadius: '10px',
-             boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-             width: '100%',  // full width of the container
-             height: '500px'  // custom height
+          <div className={styles.iframeContainer}>
+            <iframe
+              src={iframeUrl}
+              style={{
+                marginTop: '20px',
+                border: '2px solid #ccc',
+                borderRadius: '10px',
+                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                width: '100%', // full width of the container
+                height: '500px', // custom height
               }}
-            onError={handleIframeError}
-          />
-          {iframeLoadError && <div className={styles.errorMessage}>Failed to load iframe content. The URL may be restricted or invalid.</div>}
-        </div>
-         ) : (
-         <div></div>
-         )}
-       {errorMessage && <div className={styles.errorMessage}>{errorMessage}</div>}
+              onError={handleIframeError}
+            />
+            {iframeLoadError && (
+              <div className={styles.errorMessage}>
+                Failed to load iframe content. The URL may be restricted or
+                invalid.
+              </div>
+            )}
+          </div>
+        ) : (
+          <div></div>
+        )}
+        {errorMessage && (
+          <div className={styles.errorMessage}>{errorMessage}</div>
+        )}
       </div>
       <div className={styles.btnContainer}>
         <button className={styles.btn} onClick={handleReset}>
           Reset
         </button>
-        <button className={styles.btn} onClick={handleCheckBtn} disabled={!punchoutURL}>
+        <button
+          className={styles.btn}
+          onClick={handleCheckBtn}
+          disabled={!punchoutURL}
+        >
           Check
         </button>
       </div>
-     
     </div>
   );
 };

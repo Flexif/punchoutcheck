@@ -5,12 +5,12 @@ import JSONPretty from 'react-json-pretty'; // Import component for formatted JS
 
 // Define custom styles for JSONPretty component
 const customTheme = {
-  main: `line-height:1.7;color:var(--textLight);overflow:auto;font-size:14px;min-width:100%;`,
-  error: `color:var(--textLight);font-weight:500;`,
-  key: `color:var(--textLight);font-weight:400;`,
-  string: `color:var(--text);font-weight:500;`,
-  value: `color:var(--textLight);font-weight:500;`,
-  boolean: `color:var(--textLight);font-weight:500;`,
+  main: 'line-height:1.7;color:var(--textLight);overflow:auto;font-size:14px;min-width:100%;',
+  error: 'color:var(--textLight);font-weight:500;',
+  key: 'color:var(--textLight);font-weight:400;',
+  string: 'color:var(--text);font-weight:500;',
+  value: 'color:var(--textLight);font-weight:500;',
+  boolean: 'color:var(--textLight);font-weight:500;',
 };
 
 // Function to safely stringify objects, handling circular references
@@ -47,9 +47,9 @@ const CheckHeaders = () => {
     const { punchoutURL } = formData;
     if (!punchoutURL) {
       setErrorMessage('Punchout URL cannot be empty.'); // Set error if URL is empty
-      setTimeout(()=> {
+      setTimeout(() => {
         setErrorMessage('');
-     }, 5000);
+      }, 5000);
       return false;
     }
     try {
@@ -57,8 +57,8 @@ const CheckHeaders = () => {
 
       if (urlObject.protocol !== 'http:' && urlObject.protocol !== 'https:') {
         setErrorMessage('Punchout URL must use HTTP or HTTPS.'); // Set error if protocol is not HTTP or HTTPS
-        setTimeout(()=> {
-           setErrorMessage('');
+        setTimeout(() => {
+          setErrorMessage('');
         }, 5000);
         return false;
       }
@@ -70,9 +70,9 @@ const CheckHeaders = () => {
       return true;
     } catch (error) {
       setErrorMessage('The Punchout URL must use HTTP or HTTPS protocol.'); // Handle invalid URL format
-      setTimeout(()=> {
+      setTimeout(() => {
         setErrorMessage('');
-     }, 5000);
+      }, 5000);
       return false;
     }
   };
@@ -102,9 +102,9 @@ const CheckHeaders = () => {
     try {
       setErrorMessage(''); // Clear any previous error messages
       setSuccessMessage('The result will appear here shortly.');
-      setTimeout(()=> {
+      setTimeout(() => {
         setSuccessMessage('');
-     }, 5000); // Set success message
+      }, 5000); // Set success message
 
       // Send POST request to backend API
       const response = await fetch(`${backendURL}/api/check-headers`, {
@@ -117,7 +117,8 @@ const CheckHeaders = () => {
         }),
       });
 
-      if (response.ok) { // Check if response is successful
+      if (response.ok) {
+        // Check if response is successful
         const contentType = response.headers.get('content-type');
         if (contentType && contentType.includes('application/json')) {
           const result = await response.json(); // Parse JSON response
@@ -126,18 +127,20 @@ const CheckHeaders = () => {
           setErrorMessage(''); // Clear error on successful response
         } else {
           setErrorMessage('Data sent, but the response is not JSON.'); // Handle non-JSON response
-          setTimeout(()=> {
+          setTimeout(() => {
             setErrorMessage('');
-         }, 5000);
+          }, 5000);
           setResponseData(null);
         }
       } else {
         const result = await response.json(); // Parse JSON response if the response is not ok
         setSuccessMessage('');
-        setErrorMessage(`Failed to retrieve data. ${result.error} ${result.details}`); // Set error message
-        setTimeout(()=> {
+        setErrorMessage(
+          `Failed to retrieve data. ${result.error} ${result.details}`
+        ); // Set error message
+        setTimeout(() => {
           setErrorMessage('');
-       }, 5000);
+        }, 5000);
         setResponseData(null);
       }
     } catch (error) {
@@ -172,24 +175,32 @@ const CheckHeaders = () => {
       return iframes.map((iframe, index) => (
         <div className={styles.displayData} key={index}>
           <div>
-            Src: 
-           <span className={styles.title}>{iframe.src}</span> 
+            Src:
+            <span className={styles.title}>{iframe.src}</span>
           </div>
           <div>
-            Secure: 
-            <span className={styles.title}>{iframe.isSecure ? 'true' : 'false'}</span>
+            Secure:
+            <span className={styles.title}>
+              {iframe.isSecure ? 'true' : 'false'}
+            </span>
           </div>
           <div>
-            Width: 
-            <span className={styles.title}>{iframe.attributes.width || 'Not specified'}</span>
+            Width:
+            <span className={styles.title}>
+              {iframe.attributes.width || 'Not specified'}
+            </span>
           </div>
           <div>
             Height:
-            <span className={styles.title}>{iframe.attributes.height || 'Not specified'}</span>
+            <span className={styles.title}>
+              {iframe.attributes.height || 'Not specified'}
+            </span>
           </div>
           <div>
             Frameborder:
-            <span className={styles.title}>{iframe.attributes.frameborder || 'Not specified'}</span>
+            <span className={styles.title}>
+              {iframe.attributes.frameborder || 'Not specified'}
+            </span>
           </div>
         </div>
       ));
@@ -205,41 +216,61 @@ const CheckHeaders = () => {
           <div>
             <div className={styles.titles}>HTTP Headers:</div>
             <div className={styles.displayData}>
-              <JSONPretty data={safeStringify(responseData.httpHeaders)} theme={customTheme} />
+              <JSONPretty
+                data={safeStringify(responseData.httpHeaders)}
+                theme={customTheme}
+              />
             </div>
           </div>
           <div>
             <div className={styles.titles}>SSL/TLS Info:</div>
             <div className={styles.displayData}>
-              <JSONPretty data={safeStringify(responseData.sslTlsInfo)} theme={customTheme} />
+              <JSONPretty
+                data={safeStringify(responseData.sslTlsInfo)}
+                theme={customTheme}
+              />
             </div>
           </div>
           <div>
             <div className={styles.titles}>Cors status:</div>
             <div className={styles.displayData}>
-              <JSONPretty data={safeStringify(responseData.corsInfo.status)} theme={customTheme} />
+              <JSONPretty
+                data={safeStringify(responseData.corsInfo.status)}
+                theme={customTheme}
+              />
             </div>
           </div>
           <div>
             <div className={styles.titles}>Mixed Content:</div>
             <div className={styles.displayData}>
-              <JSONPretty data={responseData.mixedContent} theme={customTheme} />
+              <JSONPretty
+                data={responseData.mixedContent}
+                theme={customTheme}
+              />
             </div>
           </div>
           <div>
             <div className={styles.titles}>Iframes:</div>
-            <div className={styles.displayData}>{formatIframes(responseData.iframes)}</div>
+            <div className={styles.displayData}>
+              {formatIframes(responseData.iframes)}
+            </div>
           </div>
           <div>
             <div className={styles.titles}>SameSite Cookies:</div>
             <div className={styles.displayData}>
-              <JSONPretty data={safeStringify(responseData.sameSiteCookies)} theme={customTheme} />
+              <JSONPretty
+                data={safeStringify(responseData.sameSiteCookies)}
+                theme={customTheme}
+              />
             </div>
           </div>
           <div>
             <div className={styles.titles}>X-Frame-Options:</div>
             <div className={styles.displayData}>
-              <JSONPretty data={safeStringify(responseData.xFrameOptions)} theme={customTheme} />
+              <JSONPretty
+                data={safeStringify(responseData.xFrameOptions)}
+                theme={customTheme}
+              />
             </div>
           </div>
           <div className={styles.btnContainer}>
@@ -260,21 +291,27 @@ const CheckHeaders = () => {
                 value={formData.punchoutURL}
                 onChange={handleChange}
                 onBlur={handleOnBlur}
-                placeholder='Paste your URL here ...'
+                placeholder="Paste your URL here ..."
               />
             </div>
             {/* Display messages */}
-            {errorMessage && <div className={styles.errorMessage}>{errorMessage}</div>}
-            {successMessage && <div className={styles.successMessage}>{successMessage}</div>}
+            {errorMessage && (
+              <div className={styles.errorMessage}>{errorMessage}</div>
+            )}
+            {successMessage && (
+              <div className={styles.successMessage}>{successMessage}</div>
+            )}
             <div className={styles.infoBox}>
-                <div className={styles.info}>The result of the check headers are as follows:</div>
-                <div className={styles.info}>HTTP/S Headers</div>
-                <div className={styles.info}>SSL/TLS Information</div>
-                <div className={styles.info}>Cors Status</div>
-                <div className={styles.info}>Mixed Content</div>
-                <div className={styles.info}>Iframe</div>
-                <div className={styles.info}>SameSite Cookies</div>
-                <div className={styles.info}>X-Frame-Options</div>
+              <div className={styles.info}>
+                The result of the check headers are as follows:
+              </div>
+              <div className={styles.info}>HTTP/S Headers</div>
+              <div className={styles.info}>SSL/TLS Information</div>
+              <div className={styles.info}>Cors Status</div>
+              <div className={styles.info}>Mixed Content</div>
+              <div className={styles.info}>Iframe</div>
+              <div className={styles.info}>SameSite Cookies</div>
+              <div className={styles.info}>X-Frame-Options</div>
             </div>
           </div>
           <div className={styles.btnContainer}>
@@ -284,7 +321,8 @@ const CheckHeaders = () => {
             <button
               className={styles.btn}
               onClick={handleSend}
-              disabled={!formData.punchoutURL}>
+              disabled={!formData.punchoutURL}
+            >
               Send
             </button>
           </div>

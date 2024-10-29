@@ -1,44 +1,42 @@
 .container {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    width: 85%;
-    flex-wrap: wrap;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 85%;
+  flex-wrap: wrap;
 }
 
 .logoContainer {
-    display: flex;
-    background-color: var(--bgColor);
-    outline: 6px solid var(--iconHover);
-    border-radius: 50%;
-    min-height: 4px;
-    min-width: 40px;
-
+  display: flex;
+  background-color: var(--bgColor);
+  outline: 6px solid var(--iconHover);
+  border-radius: 50%;
+  min-height: 4px;
+  min-width: 40px;
 }
 .logo {
-    background-color: rgba(0, 0, 0, 0.050);
-    outline: 1px solid var(--iconHover);
-    border-radius: 100px;
-    display: flex;
-    justify-content: center;
-    gap: 5px;
+  background-color: rgba(0, 0, 0, 0.05);
+  outline: 1px solid var(--iconHover);
+  border-radius: 100px;
+  display: flex;
+  justify-content: center;
+  gap: 5px;
 }
 .img {
-    padding: 3px;
-    text-align: center;
-    justify-content:center;
+  padding: 3px;
+  text-align: center;
+  justify-content: center;
 }
 
 .links {
-    display: flex;
-    align-items: center;
-    text-align: center;
-    justify-content: space-around;
-    color: var(--textColor);
-    gap: 5px;
-    flex-wrap: nowrap;
-  
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: space-around;
+  color: var(--textColor);
+  gap: 5px;
+  flex-wrap: nowrap;
 }
 .title {
-    flex: 1;
+  flex: 1;
 }

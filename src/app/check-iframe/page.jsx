@@ -1,4 +1,4 @@
-import CheckIframe from "@/app/ui/main/checkIframe/CheckIframe";
+import CheckIframe from '@/app/ui/main/checkIframe/CheckIframe';
 
 const CheckIframePage = () => {
   return (

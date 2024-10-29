@@ -1,10 +1,8 @@
-import CheckHeaders from '@/app/ui/main/checkHeaders/CheckHeaders'
-import React from 'react'
+import CheckHeaders from '@/app/ui/main/checkHeaders/CheckHeaders';
+import React from 'react';
 
 const CheckHeadersPage = () => {
-  return (
-    <CheckHeaders/>
-  )
-}
+  return <CheckHeaders />;
+};
 
-export default CheckHeadersPage
+export default CheckHeadersPage;

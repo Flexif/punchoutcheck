@@ -1,219 +1,214 @@
-.container{
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-    min-height: 100vh;
-    padding: 20px;
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  min-height: 100vh;
+  padding: 20px;
 }
-  .button {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 15px;
-    font-weight: 400;
-    background-color: var(--iconHover);
-    padding: 10px;
-    border-radius: 5px;
-    color: var(--text);
-    outline: none;
-    border: 1px solid var(--textLight);
-    width: max-content;
-    cursor: pointer;
-  }
+.button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  font-weight: 400;
+  background-color: var(--iconHover);
+  padding: 10px;
+  border-radius: 5px;
+  color: var(--text);
+  outline: none;
+  border: 1px solid var(--textLight);
+  width: max-content;
+  cursor: pointer;
+}
 
-  .button:hover, .btnPO:hover {
-    background-color: var(--iconHoverSec);
-    color: var(--text);
-  }
+.button:hover,
+.btnPO:hover {
+  background-color: var(--iconHoverSec);
+  color: var(--text);
+}
 
-  .credentials{
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    background-color: var(--bgLight);
-    border-radius: 5px;
-    padding: 5px;
-  }
+.credentials {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background-color: var(--bgLight);
+  border-radius: 5px;
+  padding: 5px;
+}
 
-  .cXMLContainer {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex: 1;
-    border-radius: 5px;
-    height: 100%;
-    border: none;
-    background-color: var(--iconHover);
-  }
+.cXMLContainer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  border-radius: 5px;
+  height: 100%;
+  border: none;
+  background-color: var(--iconHover);
+}
 
-  .cXMLButton {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    gap: 10px;
-    flex: 1;
-    border-radius: 5px;
-    height: fit-content;
-    border: none;
-    background-color: var(--iconHover);
-    font-size: 15px;
-    height: 100%;
-  }
+.cXMLButton {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  gap: 10px;
+  flex: 1;
+  border-radius: 5px;
+  height: fit-content;
+  border: none;
+  background-color: var(--iconHover);
+  font-size: 15px;
+  height: 100%;
+}
 
+.expand {
+  display: flex;
+  gap: 10px;
+}
 
-  .expand {
-    display: flex;
-    gap: 10px;
-  }
-
-  .cXML {
-    padding: 10px;
-    flex: 1;
-    max-height: 410px;
-    overflow-x: hidden;
-    overflow-y: auto;
-    text-align: justify;
-    background-color: var(--bgLight);
-    border-radius: 5px;
-    line-height: 1.7;
-  }
+.cXML {
+  padding: 10px;
+  flex: 1;
+  max-height: 410px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  text-align: justify;
+  background-color: var(--bgLight);
+  border-radius: 5px;
+  line-height: 1.7;
+}
 /* WebKit Browsers (Chrome, Safari) */
 .cXML::-webkit-scrollbar {
-    width: 12px; /* Width of the scrollbar */
-  }
-  
-  .cXML::-webkit-scrollbar-track {
-    background: #f1f1f1; /* Background of the scrollbar track */
-    border-radius: 5px; /* Rounded corners for the track */
-  }
-  
-  .cXML::-webkit-scrollbar-thumb {
-    background: var(--iconHover); /* Color of the scroll thumb */
-    border-radius: 5px; /* Rounded corners for the thumb */
-  }
-  
-  .cXML::-webkit-scrollbar-thumb:hover {
-    background: var(--iconHoverSec); /* Color of the scroll thumb when hovered */
-  }
+  width: 12px; /* Width of the scrollbar */
+}
+
+.cXML::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Background of the scrollbar track */
+  border-radius: 5px; /* Rounded corners for the track */
+}
+
+.cXML::-webkit-scrollbar-thumb {
+  background: var(--iconHover); /* Color of the scroll thumb */
+  border-radius: 5px; /* Rounded corners for the thumb */
+}
+
+.cXML::-webkit-scrollbar-thumb:hover {
+  background: var(--iconHoverSec); /* Color of the scroll thumb when hovered */
+}
 /* Target nested tags with increased padding for indentation */
 
-  .title {
-    max-width: 100%;
-    background-color: var(--bgLight);
-    padding: 5px;
-    border-radius: 5px;
-    background-color: var(--iconHover);
-    
-  }
-  .cartInfo {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    font-size: 15px;
-    color: var(--text);
-    font-weight: 400;
-    gap: 10px;
-  }
-  .payload {
-    font-size: 15px;
-    color: var(--text);
-    font-weight: 400;
+.title {
+  max-width: 100%;
+  background-color: var(--bgLight);
+  padding: 5px;
+  border-radius: 5px;
+  background-color: var(--iconHover);
+}
+.cartInfo {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  font-size: 15px;
+  color: var(--text);
+  font-weight: 400;
+  gap: 10px;
+}
+.payload {
+  font-size: 15px;
+  color: var(--text);
+  font-weight: 400;
+}
+.timestamp {
+  font-size: 15px;
+  color: var(--text);
+  font-weight: 400;
+}
 
-  }
-  .timestamp {
-    font-size: 15px;
-    color: var(--text);
-    font-weight: 400;
-  }
-  
-  
-  .supplier {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    font-size: 15px;
-    color: var(--text);
-    font-weight: 400;
-    gap: 10px;
-  }
+.supplier {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  font-size: 15px;
+  color: var(--text);
+  font-weight: 400;
+  gap: 10px;
+}
 
-  .buyer {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    font-size: 15px;
-    color: var(--text);
-    font-weight: 400;
-    gap: 10px;
-  }
-  
-  .sender {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    font-size: 15px;
-    color: var(--text);
-    font-weight: 400;
-    gap: 10px;
-  }
+.buyer {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  font-size: 15px;
+  color: var(--text);
+  font-weight: 400;
+  gap: 10px;
+}
 
-  .table {
-    width: 100%;
-    border-collapse: collapse;
-    color: var(--textLight);
-    margin-top: 20px;
-    border-radius: 5px;
-  }
+.sender {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  font-size: 15px;
+  color: var(--text);
+  font-weight: 400;
+  gap: 10px;
+}
 
-  .thTitles {
-    font-size: 14px;
-    font-family: inherit;
-    
-    color: var(--textLight);
-    text-align: center;
-    
-  }
-  
-  .table th, .table td {
-    border: 1px solid var(--textLight);
-    padding: 8px;
-    text-align: left;
-  }
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--textLight);
+  margin-top: 20px;
+  border-radius: 5px;
+}
 
-  .table td {
-    font-weight: 400;
-    color: var(--text);
-  }
-  
-  .table th {
-    background-color: var(--bgWhite);
+.thTitles {
+  font-size: 14px;
+  font-family: inherit;
 
-  }
+  color: var(--textLight);
+  text-align: center;
+}
+
+.table th,
+.table td {
+  border: 1px solid var(--textLight);
+  padding: 8px;
+  text-align: left;
+}
+
+.table td {
+  font-weight: 400;
+  color: var(--text);
+}
+
+.table th {
+  background-color: var(--bgWhite);
+}
 
 .header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
 }
 
 .table tr:nth-child(even) {
-    background-color: var(--bgWhite);
+  background-color: var(--bgWhite);
 }
 
 .table tr:hover {
-    background-color: var(--iconHover);
+  background-color: var(--iconHover);
 }
 
 .table td:last-child {
-    text-align: right;
+  text-align: right;
 }
 
-
 .totalPrice {
-    margin-top: 20px;
-    font-weight: 500;
-    color: var(--text);
+  margin-top: 20px;
+  font-weight: 500;
+  color: var(--text);
 }
 
 .btnContainer {
@@ -232,12 +227,19 @@
   font-size: 15px;
 }
 
-.infoBox{
-   display: flex;
-   gap: 10px;
-   padding: 10px;
-   align-items: center;
-   background-color: var(--iconHover);
-   border-radius: 5px;
-   font-weight: 400;
+.infoBox {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  align-items: center;
+  background-color: var(--iconHover);
+  border-radius: 5px;
+  font-weight: 400;
 }
+
+.attributeValue, .attribute, .textValue {
+  font-weight: 400;
+}
+
+
+
