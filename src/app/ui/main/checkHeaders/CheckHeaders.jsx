@@ -42,24 +42,22 @@ const CheckHeaders = () => {
   const [successMessage, setSuccessMessage] = useState(''); // Success message state
   const [responseData, setResponseData] = useState(null); // State for storing API response
 
+  setTimeout(() => {
+    setErrorMessage('');
+  }, 8000);
+
   // Function to validate the punchout URL
   const ValidateURL = () => {
     const { punchoutURL } = formData;
     if (!punchoutURL) {
-      setErrorMessage('Punchout URL cannot be empty.'); // Set error if URL is empty
-      setTimeout(() => {
-        setErrorMessage('');
-      }, 5000);
+      setErrorMessage('Please enter a valid URL with the HTTP(S) protocol.'); // Set error if URL is empty
       return false;
     }
     try {
       const urlObject = new URL(punchoutURL); // Create URL object to validate
 
       if (urlObject.protocol !== 'http:' && urlObject.protocol !== 'https:') {
-        setErrorMessage('Punchout URL must use HTTP or HTTPS.'); // Set error if protocol is not HTTP or HTTPS
-        setTimeout(() => {
-          setErrorMessage('');
-        }, 5000);
+        setErrorMessage('Please enter a valid URL with the HTTP(S) protocol.'); // Set error if protocol is not HTTP or HTTPS
         return false;
       }
 
@@ -69,10 +67,7 @@ const CheckHeaders = () => {
       });
       return true;
     } catch (error) {
-      setErrorMessage('The Punchout URL must use HTTP or HTTPS protocol.'); // Handle invalid URL format
-      setTimeout(() => {
-        setErrorMessage('');
-      }, 5000);
+      setErrorMessage('Please add te HTTP(s) protocol to the URL.'); // Handle invalid URL format
       return false;
     }
   };
@@ -102,9 +97,6 @@ const CheckHeaders = () => {
     try {
       setErrorMessage(''); // Clear any previous error messages
       setSuccessMessage('The result will appear here shortly.');
-      setTimeout(() => {
-        setSuccessMessage('');
-      }, 5000); // Set success message
 
       // Send POST request to backend API
       const response = await fetch(`${backendURL}/api/check-headers`, {
@@ -127,9 +119,6 @@ const CheckHeaders = () => {
           setErrorMessage(''); // Clear error on successful response
         } else {
           setErrorMessage('Data sent, but the response is not JSON.'); // Handle non-JSON response
-          setTimeout(() => {
-            setErrorMessage('');
-          }, 5000);
           setResponseData(null);
         }
       } else {
@@ -138,9 +127,6 @@ const CheckHeaders = () => {
         setErrorMessage(
           `Failed to retrieve data. ${result.error} ${result.details}`
         ); // Set error message
-        setTimeout(() => {
-          setErrorMessage('');
-        }, 5000);
         setResponseData(null);
       }
     } catch (error) {

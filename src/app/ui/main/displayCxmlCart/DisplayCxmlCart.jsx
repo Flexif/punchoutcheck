@@ -155,7 +155,7 @@ const DisplayCxmlCart = () => {
                   const trimmedText = child.nodeValue.trim();
                   return (
                     trimmedText && (
-                      <div key={`${trimmedText}-${childIndex}`} style={{ color: customTheme.textColor, marginLeft: `${(level ) * 5}px` }}>
+                      <div className={styles.textValue} key={`${trimmedText}-${childIndex}`} style={{ color: customTheme.textColor, marginLeft: `${(level ) * 5}px` }}>
                         {trimmedText}
                       </div>
                     )

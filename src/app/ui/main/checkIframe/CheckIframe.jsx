@@ -9,6 +9,11 @@ const CheckIframe = () => {
   const [iframeUrl, setIframeUrl] = useState('');
   const [iframeLoadError, setIframeLoadError] = useState(false);
 
+  setTimeout(() => {
+    setErrorMessage('');
+  }, 6000);
+
+
   const handleInputChange = (e) => {
     setPunchoutURL(e.target.value);
     setErrorMessage(''); // Clear any previous error message
@@ -18,9 +23,6 @@ const CheckIframe = () => {
   const ValidateURL = () => {
     if (!punchoutURL) {
       setErrorMessage('Punchout URL cannot be empty.'); // Set error if URL is empty
-      setTimeout(() => {
-        setErrorMessage('');
-      }, 5000);
       return false;
     }
     try {
@@ -28,18 +30,12 @@ const CheckIframe = () => {
 
       if (urlObject.protocol !== 'http:' && urlObject.protocol !== 'https:') {
         setErrorMessage('Punchout URL must use HTTP or HTTPS.'); // Set error if protocol is not HTTP or HTTPS
-        setTimeout(() => {
-          setErrorMessage('');
-        }, 5000);
         return false;
       }
 
       return true;
     } catch (error) {
       setErrorMessage('The Punchout URL must use HTTP or HTTPS protocol.'); // Handle invalid URL format
-      setTimeout(() => {
-        setErrorMessage('');
-      }, 5000);
       return false;
     }
   };

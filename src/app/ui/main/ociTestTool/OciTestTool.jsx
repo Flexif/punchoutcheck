@@ -32,7 +32,7 @@ const OciTestTool = () => {
   const handleOnBlur = () => {
     if (!validateURL(formData.baseURL)) {
       setErrorMessage(
-        'The PunchOut URL must be a valid URL with the HTTP(S) protocol.'
+        'Please enter a valid URL with the HTTP(S) protocol.'
       );
       setTimeout(() => {
         setErrorMessage('');

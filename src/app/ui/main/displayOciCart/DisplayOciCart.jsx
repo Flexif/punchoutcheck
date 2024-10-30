@@ -30,9 +30,10 @@ const DisplayOciCart = () => {
     setInfoMessage(
       'A Purchase Order is created if you have a Punchout Order Request license.'
     );
+    // Clearing error message after 6 seconds
     setTimeout(() => {
       setInfoMessage('');
-    }, 10000);
+    }, 6000);
   };
 
   const handleDisplayButton = () => {

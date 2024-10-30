@@ -6,7 +6,7 @@ const CxmlTestTool = () => {
   const backendURL = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
   const PosrURL = `${backendURL}/api/cxml-punchout`;
   const [errorMessage, setErrorMessage] = useState('');
-
+  const [cxmlPayload, setCxmlPayload] = useState('');
   // Generate payload ID
   const generatePayloadID = () =>
     (Math.random() * 1e15).toFixed(0).padStart(15, '0').slice(0, 15);
@@ -17,6 +17,11 @@ const CxmlTestTool = () => {
     return now.toISOString().replace('Z', '+00:00');
   };
 
+  // Clearing error message after 6 seconds
+  setTimeout(()=>{
+    setErrorMessage('');
+  }, 6000);
+
   const [formData, setFormData] = useState({
     fromDomain: 'Network Id',
     fromIdentity: 'Buyer Identity',
@@ -25,16 +30,15 @@ const CxmlTestTool = () => {
     senderDomain: 'Network User Id',
     senderIdentity: 'Username',
     sharedSecret: 'Password',
-    PayloadId: generatePayloadID() + '@PunchoutTesttool.com',
+    PayloadId: generatePayloadID() + '@punchoutreports.com',
     timeStamp: generateTimestamp(),
     supplierUrl: '',
     buyerUrl: `${backendURL}/api/cxml-data`,
-    extrinsicUser: 'PunchoutTestTool',
-    extrinsicUsername: 'PunchoutTestTool',
-    extrinsicEmail: 'punchout.user@punchottesttool.com',
+    extrinsicUser: 'punchoutreports',
+    extrinsicUsername: 'punchoutreports',
+    extrinsicEmail: 'punchout.user@punchoutreports.com',
   });
 
-  const [cxmlPayload, setCxmlPayload] = useState('');
 
   useEffect(() => {
     const updatedCxmlPayload = `<?xml version="1.0" encoding="UTF-8"?>
@@ -121,13 +125,13 @@ const CxmlTestTool = () => {
       senderDomain: 'Network User Id',
       senderIdentity: 'Username',
       sharedSecret: 'Password',
-      PayloadId: generatePayloadID() + '@PunchoutTesttool.com',
+      PayloadId: generatePayloadID() + '@punchoutreports.com',
       timeStamp: generateTimestamp(),
       supplierUrl: '',
       buyerUrl: formData.buyerUrl,
-      extrinsicUser: 'PunchoutTestTool',
-      extrinsicUsername: 'PunchoutTestTool',
-      extrinsicEmail: 'user@punchottesttool.com',
+      extrinsicUser: 'punchoutreports',
+      extrinsicUsername: 'punchoutreports',
+      extrinsicEmail: 'user@punchoutreports.com',
     });
     setErrorMessage(''); // Clear any previous error messages on reset
   };
@@ -138,7 +142,7 @@ const CxmlTestTool = () => {
 
     try {
       if (!formData.supplierUrl) {
-        setErrorMessage('Please enter Supplier URL');
+        setErrorMessage('Please enter a valid URL with the HTTP(S) protocol.');
         return;
       }
 
@@ -166,7 +170,7 @@ const CxmlTestTool = () => {
       // Ensure response is OK
       if (!response.ok) {
         setErrorMessage(
-          `HTTP Error: ${response.status} ${response.statusText}`
+          'Please enter a valid Punchout URL'
         );
         return;
       }
@@ -312,8 +316,7 @@ const CxmlTestTool = () => {
           type="button"
           className={styles.btn}
           onClick={handleSend}
-          disabled={!formData.supplierUrl.trim()}
-        >
+          >
           Send
         </button>
       </div>
