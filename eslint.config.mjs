@@ -1,5 +1,6 @@
 // eslint.config.mjs
 import { FlatCompat } from '@eslint/eslintrc';
+import unusedImports from 'eslint-plugin-unused-imports';
 import path from 'path';
 import globals from 'globals';
 import { createRequire } from 'module'; // Allows loading CommonJS modules
@@ -13,6 +14,8 @@ const compat = new FlatCompat({
 
 export default [
   {
+
+    plugins: {},
     // Specify file patterns for JavaScript and JSX files only
     ignores: [
       '**/*.gz',
