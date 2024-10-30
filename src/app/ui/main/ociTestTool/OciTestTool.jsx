@@ -6,7 +6,7 @@ import styles from './ociTestTool.module.css';
 import { CiCircleRemove } from 'react-icons/ci';
 
 const OciTestTool = () => {
-  const backendURL = process.env.NEXT_PUBLIC_BACKEND_BASE_URL || '';
+  const backendURL = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
   const [errorMessage, setErrorMessage] = useState('');
   const [sucessMessage, setSuccessMessage] = useState('');
   const [customParams, setCustomParams] = useState([

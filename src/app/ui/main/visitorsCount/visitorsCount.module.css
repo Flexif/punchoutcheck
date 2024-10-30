@@ -1,0 +1,16 @@
+.container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.counts{
+    color: var(--iconHoverSec);
+    font-weight: 500;
+    font-size: 15px;
+}
+
+.icon {
+    color: var(--iconHoverSec);
+}
