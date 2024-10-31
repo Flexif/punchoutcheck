@@ -34,7 +34,7 @@ const VisitorCount = () => {
   }, []);
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container} title='Website Visitors'>
       <IoPeopleSharp size={20} className={styles.icon} />
       <div className={styles.counts}>
         {visitorCount !== null ? visitorCount : <div></div>}
