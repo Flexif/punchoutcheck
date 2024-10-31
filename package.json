@@ -25,14 +25,12 @@
   "devDependencies": {
     "@babel/eslint-parser": "^7.25.9",
     "@babel/preset-react": "^7.25.9",
-    "@next/eslint-plugin-next": "^15.0.1",
+    "@next/eslint-plugin-next": "^15.0.2",
     "eslint": "^9.13.0",
     "eslint-config-next": "^15.0.1",
     "eslint-config-prettier": "^9.1.0",
     "eslint-define-config": "^2.1.0",
-    "eslint-plugin-prettier": "^5.2.1",
-    "eslint-plugin-unused-imports": "^4.1.4",
-    "prettier": "^3.3.3"
+    "eslint-plugin-prettier": "^5.2.1"
   },
   "prettier": {
     "semi": true,
