@@ -90,10 +90,10 @@ const DisplayOciCart = () => {
     uniqueKeys.includes('NEW_ITEM-PRICE') &&
     uniqueKeys.includes('NEW_ITEM-QUANTITY')
       ? cartData['NEW_ITEM-PRICE'].reduce((total, price, index) => {
-        const quantity = parseFloat(cartData['NEW_ITEM-QUANTITY'][index]);
-        const unitPrice = parseFloat(price);
-        return total + quantity * unitPrice;
-      }, 0)
+          const quantity = parseFloat(cartData['NEW_ITEM-QUANTITY'][index]);
+          const unitPrice = parseFloat(price);
+          return total + quantity * unitPrice;
+        }, 0)
       : 0;
 
   return (

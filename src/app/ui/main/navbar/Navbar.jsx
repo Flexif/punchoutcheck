@@ -9,7 +9,6 @@ import { PiFrameCorners } from 'react-icons/pi';
 import { RiHomeLine } from 'react-icons/ri';
 import Image from 'next/image';
 
-
 const Navbar = () => {
   const navbarLinks = [
     {

@@ -1,5 +1,4 @@
-.container {
-}
+.container {}
 
 .container:hover,
 .active {
@@ -7,19 +6,19 @@
 }
 
 .title {
-  display: flex;
-  gap: 10px;
-  padding: 5px 15px;
-  margin: auto;
-  border-radius: 10px;
-  cursor: pointer;
+  display        : flex;
+  gap            : 10px;
+  padding        : 5px 15px;
+  margin         : auto;
+  border-radius  : 10px;
+  cursor         : pointer;
   justify-content: center;
-  align-items: center;
+  align-items    : center;
   justify-content: center;
 }
 
 .title:hover {
-  border-radius: 10px;
-  /*outline: 1px solid var(--iconHover);*/
+  border-radius   : 10px;
+  /*outline       : 1px solid var(--iconHover);*/
   background-color: var(--iconHover);
 }

@@ -7,6 +7,7 @@ import { CiCircleRemove } from 'react-icons/ci';
 
 const OciTestTool = () => {
   const backendURL = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
+  const [method, setMethod] = useState('GET');
   const [errorMessage, setErrorMessage] = useState('');
   const [sucessMessage, setSuccessMessage] = useState('');
   const [customParams, setCustomParams] = useState([
@@ -31,9 +32,7 @@ const OciTestTool = () => {
   // Validate URL after the onBlur event on the BaseURL input field
   const handleOnBlur = () => {
     if (!validateURL(formData.baseURL)) {
-      setErrorMessage(
-        'Please enter a valid URL with the HTTP(S) protocol.'
-      );
+      setErrorMessage('Please enter a valid URL with the HTTP(S) protocol.');
       setTimeout(() => {
         setErrorMessage('');
       }, 6000);
@@ -250,10 +249,9 @@ const OciTestTool = () => {
       // Check if the response status is OK
       if (response.ok) {
         const result = await response.json();
-        console.log('Backend response:', result);
 
         // Check if the response contains the updated URL
-        if (result.success && result.OciPunchoutURL) {
+        if (result.success && result.response) {
           // Display success message and open the updated URL
           setSuccessMessage(
             'The OCI PunchOut session will be open in a new window in a few seconds'
@@ -262,7 +260,34 @@ const OciTestTool = () => {
             setSuccessMessage('');
           }, 6000);
 
-          window.open(result.OciPunchoutURL, '_blank'); // Open the URL in a new tab
+          if (method === 'POST') {
+            // Create a hidden form to POST the data to result.response
+            const form = document.createElement('form');
+            form.method = 'POST'; // Always POST, because we want to submit data
+            form.action = result.response;
+            form.target = '_blank'; // Open in a new tab
+
+            // Add hidden inputs for POST data if necessary
+            const hiddenInput = document.createElement('input');
+            hiddenInput.type = 'hidden';
+            form.appendChild(hiddenInput);
+
+            // You can append additional custom parameters here dynamically
+            customParams.forEach((param) => {
+              const paramInput = document.createElement('input');
+              paramInput.type = 'hidden';
+              paramInput.name = param.key;
+              paramInput.value = param.value;
+              form.appendChild(paramInput);
+            });
+
+            // Submit the form
+            document.body.appendChild(form);
+            form.submit();
+            document.body.removeChild(form); // Clean up
+          } else {
+            window.open(result.response, '_blank');
+          }
         } else {
           // Handle the case where the URL is not returned as expected
           setErrorMessage('The Punchout URL was not retrieved!');
@@ -305,6 +330,15 @@ const OciTestTool = () => {
             onBlur={handleOnBlur}
             autoComplete="off"
           />
+          <div className={styles.checkedBox}>
+            <div className={styles.checkBoxlabel}>Use POST Method</div>
+            <input
+              type="checkbox"
+              id="usePostMethod"
+              checked={method === 'POST'}
+              onChange={() => setMethod(method === 'GET' ? 'POST' : 'GET')}
+            />
+          </div>
         </div>
         {errorMessage ? (
           <div className={styles.errorMessage}>{errorMessage}</div>

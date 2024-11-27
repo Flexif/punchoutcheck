@@ -12,7 +12,7 @@ const VisitorCount = () => {
     // Fetch the latest visitor count from the server
     const fetchVisitorCount = async () => {
       if (!backendURL) {
-        console.error("Backend URL is not defined");
+        console.error('Backend URL is not defined');
         return;
       }
 
@@ -35,13 +35,15 @@ const VisitorCount = () => {
   }, [backendURL]);
 
   return (
-    <div className={styles.container} title='Website Visitors'>
+    <div className={styles.container} title="Website Visitors">
       <IoPeopleSharp size={20} className={styles.icon} />
       <div className={styles.counts}>
         {error ? (
           <span>{error}</span>
+        ) : visitorCount !== null ? (
+          visitorCount
         ) : (
-          visitorCount !== null ? visitorCount : <span></span>
+          <span></span>
         )}
       </div>
     </div>

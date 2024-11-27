@@ -1,4 +1,3 @@
-
 import { Inter } from 'next/font/google';
 import './ui/globals.css';
 import Navbar from './ui/main/navbar/Navbar';
@@ -31,8 +30,10 @@ export default function RootLayout({ children }) {
             <div className={styles.opacity}>{children}</div>
           </div>
           <div className={styles.footer}>
-          <VisitorCount/>
-           <div>© 2024 Punchout Reports. All rights reserved by Punchout Reports.</div>
+            <VisitorCount />
+            <div>
+              © 2024 Punchout Reports. All rights reserved by Punchout Reports.
+            </div>
           </div>
         </div>
       </body>

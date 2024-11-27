@@ -1,21 +1,22 @@
 .container {
-  display: flex;
+  display       : flex;
   flex-direction: column;
-  min-height: 100vh;
+  min-height    : 100vh;
 }
 
 .form {
-  display: flex;
+  display       : flex;
   flex-direction: column;
-  gap: 10px;
+  gap           : 10px;
 }
+
 .inputsPunchout {
-  display: flex;
-  gap: 10px;
+  display         : flex;
+  gap             : 10px;
   background-color: var(--bgLight);
-  width: 70%;
-  padding: 5px 10px;
-  border-radius: 10px;
+  width           : 70%;
+  padding         : 5px 10px;
+  border-radius   : 10px;
 }
 
 .label {
@@ -24,9 +25,9 @@
 
 .inputPunchout {
   border-radius: 10px;
-  padding: 3px 10px;
-  border: none;
-  width: 100%;
+  padding      : 3px 10px;
+  border       : none;
+  width        : 100%;
 }
 
 .inputPunchout:focus {
@@ -34,33 +35,34 @@
 }
 
 .btnContainer {
-  display: flex;
-  gap: 20px;
-  align-items: center;
+  display        : flex;
+  gap            : 20px;
+  align-items    : center;
   justify-content: center;
 }
+
 .info {
-  padding: 5px 10px;
+  padding         : 5px 10px;
   background-color: var(--iconHover);
-  color: var(--text);
-  text-align: center;
-  font-weight: 400;
-  border-radius: 5px;
+  color           : var(--text);
+  text-align      : center;
+  font-weight     : 400;
+  border-radius   : 5px;
 }
 
 .btn {
-  margin-top: 100px;
-  padding: 5px 60px;
-  border: 2px solid var(--iconHover);
-  border-radius: 10px;
-  cursor: pointer;
-  color: var(--textLight);
+  margin-top      : 100px;
+  padding         : 5px 60px;
+  border          : 2px solid var(--iconHover);
+  border-radius   : 10px;
+  cursor          : pointer;
+  color           : var(--textLight);
   background-color: var(--bgLight);
 }
 
 .btn:hover {
   background-color: var(--iconHover);
-  color: var(--text);
+  color           : var(--text);
 }
 
 .inputsPunchout:hover {
@@ -68,12 +70,12 @@
 }
 
 .errorMessage {
-  display: flex;
+  display         : flex;
   background-color: var(--warn);
-  padding: 5px;
-  font-weight: 400;
-  font-size: 14px;
-  width: fit-content;
-  border-radius: 5px;
-  color: var(--text);
+  padding         : 5px;
+  font-weight     : 400;
+  font-size       : 14px;
+  width           : fit-content;
+  border-radius   : 5px;
+  color           : var(--text);
 }

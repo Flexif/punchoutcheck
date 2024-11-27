@@ -1,14 +1,14 @@
-.container{
-    display: flex;
+.container {
+    display        : flex;
     justify-content: center;
-    align-items: center;
-    gap: 10px;
+    align-items    : center;
+    gap            : 10px;
 }
 
-.counts{
-    color: var(--iconHoverSec);
+.counts {
+    color      : var(--iconHoverSec);
     font-weight: 500;
-    font-size: 15px;
+    font-size  : 15px;
 }
 
 .icon {

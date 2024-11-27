@@ -18,7 +18,7 @@ const CxmlTestTool = () => {
   };
 
   // Clearing error message after 6 seconds
-  setTimeout(()=>{
+  setTimeout(() => {
     setErrorMessage('');
   }, 6000);
 
@@ -38,7 +38,6 @@ const CxmlTestTool = () => {
     extrinsicUsername: 'punchoutreports',
     extrinsicEmail: 'punchout.user@punchoutreports.com',
   });
-
 
   useEffect(() => {
     const updatedCxmlPayload = `<?xml version="1.0" encoding="UTF-8"?>
@@ -169,9 +168,7 @@ const CxmlTestTool = () => {
 
       // Ensure response is OK
       if (!response.ok) {
-        setErrorMessage(
-          'Please enter a valid Punchout URL'
-        );
+        setErrorMessage('Please enter a valid Punchout URL');
         return;
       }
 
@@ -266,7 +263,7 @@ const CxmlTestTool = () => {
           onChange={handleChange}
           required
           autoComplete="off"
-          placeholder='Paste your Punchout URL here ...'
+          placeholder="Paste your Punchout URL here ..."
         />
       </div>
       <div>
@@ -312,11 +309,7 @@ const CxmlTestTool = () => {
         <button type="button" className={styles.btn} onClick={handleReset}>
           Reset
         </button>
-        <button
-          type="button"
-          className={styles.btn}
-          onClick={handleSend}
-          >
+        <button type="button" className={styles.btn} onClick={handleSend}>
           Send
         </button>
       </div>

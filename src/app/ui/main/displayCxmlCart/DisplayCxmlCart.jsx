@@ -119,7 +119,10 @@ const DisplayCxmlCart = () => {
       const children = Array.from(node.childNodes);
 
       return (
-        <div key={`${tagName}-${index}`} style={{ marginLeft: `${level * 10}px` }}>
+        <div
+          key={`${tagName}-${index}`}
+          style={{ marginLeft: `${level * 10}px` }}
+        >
           {/* Opening tag */}
           <span className={styles.tag} style={{ color: customTheme.tagColor }}>
             &lt;{tagName}
@@ -132,7 +135,10 @@ const DisplayCxmlCart = () => {
               style={{ color: customTheme.attributeKeyColor }}
             >
               {` ${attr.name}="`}
-              <span className={styles.attributeValue} style={{ color: customTheme.attributeValueColor }}>
+              <span
+                className={styles.attributeValue}
+                style={{ color: customTheme.attributeValueColor }}
+              >
                 {attr.value}
               </span>
               {'"'}
@@ -145,7 +151,9 @@ const DisplayCxmlCart = () => {
           {/* Children */}
           {children.length === 0 ? (
             // Self-closing tag for empty elements
-            <span style={{ color: customTheme.textColor }}>/&lt;{tagName}&gt;</span>
+            <span style={{ color: customTheme.textColor }}>
+              /&lt;{tagName}&gt;
+            </span>
           ) : (
             <div>
               {/* If there are text nodes or other child elements, ensure proper spacing */}
@@ -155,7 +163,14 @@ const DisplayCxmlCart = () => {
                   const trimmedText = child.nodeValue.trim();
                   return (
                     trimmedText && (
-                      <div className={styles.textValue} key={`${trimmedText}-${childIndex}`} style={{ color: customTheme.textColor, marginLeft: `${(level ) * 5}px` }}>
+                      <div
+                        className={styles.textValue}
+                        key={`${trimmedText}-${childIndex}`}
+                        style={{
+                          color: customTheme.textColor,
+                          marginLeft: `${level * 5}px`,
+                        }}
+                      >
                         {trimmedText}
                       </div>
                     )
@@ -164,7 +179,10 @@ const DisplayCxmlCart = () => {
                 return xmlToJSX(child, childIndex, level + 1);
               })}
               {/* Closing tag */}
-              <span className={styles.tagName} style={{ color: customTheme.tagColor }}>
+              <span
+                className={styles.tagName}
+                style={{ color: customTheme.tagColor }}
+              >
                 &lt;/{tagName}&gt;
               </span>
             </div>
@@ -176,7 +194,14 @@ const DisplayCxmlCart = () => {
       const trimmedText = node.nodeValue.trim();
       return (
         trimmedText && (
-          <div className={styles.textValue} style={{ color: customTheme.textColor, marginLeft: `${level * 20}px` }} key={`${trimmedText}-${index}`}>
+          <div
+            className={styles.textValue}
+            style={{
+              color: customTheme.textColor,
+              marginLeft: `${level * 20}px`,
+            }}
+            key={`${trimmedText}-${index}`}
+          >
             {trimmedText}
           </div>
         )
@@ -185,7 +210,6 @@ const DisplayCxmlCart = () => {
 
     return null; // Ignore other node types
   };
-
 
   return (
     <div className={styles.container}>
@@ -235,10 +259,16 @@ const DisplayCxmlCart = () => {
                 </div>
               </div>
             </div>
-            <div className={styles.cXMLContainer} onDoubleClick={handleDisplayXML}>
+            <div
+              className={styles.cXMLContainer}
+              onDoubleClick={handleDisplayXML}
+            >
               {displayXML ? (
                 <pre className={styles.cXML}>
-                     {xmlToJSX(new DOMParser().parseFromString(xmlData, 'application/xml').documentElement)}
+                  {xmlToJSX(
+                    new DOMParser().parseFromString(xmlData, 'application/xml')
+                      .documentElement
+                  )}
                 </pre>
               ) : (
                 <button className={styles.cXMLButton}>
