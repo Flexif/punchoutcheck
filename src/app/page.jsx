@@ -3,7 +3,7 @@ import Hero from './ui/main/hero/Hero';
 
 const Homepage = () => {
   return (
-    <div>
+    <div suppressHydrationWarning={true}>
       <Hero />
     </div>
   );

@@ -48,40 +48,41 @@ const DisplayCxmlCart = () => {
 
   // Set xmlDocId from searchParams when it changes
   useEffect(() => {
-    const id = searchParams.get('xmlDocId');
-    if (id) {
-      setXmlDocId(id);
+    if (typeof window !== 'undefined') {
+      const id = searchParams.get('xmlDocId');
+      if (id) {
+        setXmlDocId(id);
+      }
     }
   }, [searchParams]);
 
   // Fetch data based on xmlDocId
   useEffect(() => {
-    const fetchData = async () => {
-      if (xmlDocId === null) {
-        setLoading(false);
-        return; // Early return if there's no xmlDocId
-      }
+    if (!xmlDocId) {
+      setLoading(false); // Avoid unnecessary loading state
+      return;
+    }
 
-      setLoading(true); // Start loading
+    const fetchData = async () => {
+      setLoading(true);
       try {
         const response = await fetch(`${backendURL}/api/cxml-data/${xmlDocId}`);
         if (response.ok) {
           const data = await response.json();
-          setXmlData(data.xml); // Set raw XML data for display
-          setJsonData(data.json); // Set parsed JSON data for table
+          setXmlData(data.xml);
+          setJsonData(data.json);
         } else {
           setError('Failed to fetch data');
         }
-      } catch (fetchError) {
-        console.error('Fetch Error:', fetchError);
+      } catch (error) {
         setError('Failed to fetch data');
       } finally {
-        setLoading(false); // End loading
+        setLoading(false);
       }
     };
 
     fetchData();
-  }, [xmlDocId, backendURL]); // Fetch data when xmlDocId changes
+  }, [xmlDocId]);
 
   // Conditional rendering based on loading and error states
   if (loading) {
@@ -226,31 +227,31 @@ const DisplayCxmlCart = () => {
           <div className={styles.expand}>
             <div className={styles.credentials}>
               <div className={styles.supplier}>
-                <p className={styles.title}>Supplier headers</p>
-                <p>Credentials: {supplierDomain}</p>
-                <p>
+                <div className={styles.title}>Supplier headers</div>
+                <div>Credentials: {supplierDomain}</div>
+                <div>
                   Supplier Identity:{' '}
                   {cXML.Header[0].From[0].Credential[0].Identity[0]}
-                </p>
+                </div>
               </div>
               <div className={styles.buyer}>
-                <p className={styles.title}>Buyers headers</p>
-                <p>Credentials: {buyerDomain}</p>
-                <p>
+                <div className={styles.title}>Buyers headers</div>
+                <div>Credentials: {buyerDomain}</div>
+                <div>
                   Buyer Identity:{' '}
                   {cXML.Header[0].To[0].Credential[0].Identity[0]}
-                </p>
+                </div>
               </div>
               <div className={styles.sender}>
-                <p className={styles.title}>Sender headers</p>
-                <p>
+                <div className={styles.title}>Sender headers</div>
+                <div>
                   Sender Identity:{' '}
                   {cXML.Header[0].Sender[0].Credential[0].Identity[0]}
-                </p>
-                <p>User Agent: {cXML.Header[0].Sender[0].UserAgent[0]}</p>
+                </div>
+                <div>User Agent: {cXML.Header[0].Sender[0].UserAgent[0]}</div>
               </div>
               <div className={styles.cartInfo}>
-                <p className={styles.title}>cXML details</p>
+                <div className={styles.title}>cXML details</div>
                 <div className={styles.payload}>
                   Payload ID: {cXML.$.payloadID}
                 </div>
@@ -273,7 +274,7 @@ const DisplayCxmlCart = () => {
               ) : (
                 <button className={styles.cXMLButton}>
                   <MdOutlineExpandCircleDown size={23} />
-                  <p>Show cXML version</p>
+                  <div>Show cXML version</div>
                 </button>
               )}
             </div>

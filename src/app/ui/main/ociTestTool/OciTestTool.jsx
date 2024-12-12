@@ -7,19 +7,25 @@ import { CiCircleRemove } from 'react-icons/ci';
 
 const OciTestTool = () => {
   const backendURL = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
+
   const [method, setMethod] = useState('GET');
   const [errorMessage, setErrorMessage] = useState('');
   const [sucessMessage, setSuccessMessage] = useState('');
-  const [customParams, setCustomParams] = useState([
-    { key: '', value: '', id: uuidv4(), prevKey: '' },
-  ]);
+  const [customParams, setCustomParams] = useState([]); // Start with an empty array
+
   const [formData, setFormData] = useState({
-    baseURL: '',
+    baseURL: '', // Initialize as an empty string
     username: '',
     password: '',
     hookURL: '',
   });
 
+  // Ensure UUIDs are only generated on the client-side
+  useEffect(() => {
+    setCustomParams([{ key: '', value: '', id: uuidv4(), prevKey: '' }]); // Generate UUID on mount
+  }, []);
+
+  // Validate URL after the onBlur event on the BaseURL input field
   const validateURL = (url) => {
     try {
       new URL(url);
@@ -29,7 +35,6 @@ const OciTestTool = () => {
     }
   };
 
-  // Validate URL after the onBlur event on the BaseURL input field
   const handleOnBlur = () => {
     if (!validateURL(formData.baseURL)) {
       setErrorMessage('Please enter a valid URL with the HTTP(S) protocol.');
@@ -47,7 +52,7 @@ const OciTestTool = () => {
 
     if (validateURL(baseURL)) {
       try {
-        const url = new URL(baseURL.toLowerCase());
+        const url = new URL(baseURL);
         const searchParams = new URLSearchParams(url.search);
 
         setFormData((prevData) => ({
@@ -83,21 +88,20 @@ const OciTestTool = () => {
       setErrorMessage('');
     }
   };
-  // Delay in extracting queries from the BaseURL
+
   const debouncedExtractParamsFromURL = useCallback(
     debounce((baseURL) => {
       extractParamsFromURL(baseURL);
     }, 500),
-    [] // Add extractParamsFromURL as a dependency
+    []
   );
 
-  // Update baseURL after Edit or Change
   const updateBaseURLNow = (params) => {
     const { username, password, hookURL, baseURL, customParams } = params;
     if (!baseURL) return;
 
     try {
-      const url = new URL(baseURL.toLowerCase());
+      const url = new URL(baseURL);
       const searchParams = new URLSearchParams(url.search);
 
       if (username) searchParams.set('username', username);
@@ -138,26 +142,18 @@ const OciTestTool = () => {
       setErrorMessage('');
     }
   };
-  //Delay in updating the BaseURL
+
   const debouncedUpdateBaseURL = useCallback(
     debounce((params) => {
       updateBaseURLNow(params);
     }, 1000),
-    [] // Add updateBaseURLNow as a dependency
+    []
   );
 
   // Event listener for the changingthe BaseURL
   useEffect(() => {
     if (formData.baseURL) {
       debouncedExtractParamsFromURL(formData.baseURL);
-    } else {
-      // Reset only if the previous value was not an empty string
-      setFormData((prevData) => {
-        if (prevData.baseURL !== '') {
-          handleReset();
-        }
-        return prevData; // Return the current state
-      });
     }
   }, [formData.baseURL, debouncedExtractParamsFromURL]);
 
@@ -176,24 +172,27 @@ const OciTestTool = () => {
     debouncedUpdateBaseURL,
   ]);
 
-  //fuction to get the value from the input fields and set data
+  // Function to get the value from the input fields and set data
   const handleChange = (e) => {
     const { name, value } = e.target;
+
     setFormData((prevData) => {
-      const newFormData = { ...prevData, [name]: value.trim() };
-      if (name === 'baseURL' && value === '') {
-        return {
-          baseURL: '',
-          username: '',
-          password: '',
-          hookURL: '',
-        };
-      }
-      return newFormData;
+      const newValue = value.trim();
+      return { ...prevData, [name]: newValue };
     });
+
+    // Special case for baseURL: Reset all associated fields when baseURL is cleared
+    if (name === 'baseURL' && value === '') {
+      setFormData({
+        baseURL: '',
+        username: '',
+        password: '',
+        hookURL: '',
+      });
+      setCustomParams([{ key: '', value: '', id: uuidv4(), prevKey: '' }]);
+    }
   };
 
-  //fuction to get the value from the custom params fields and set data
   const handleCustomParamChange = (index, field, value) => {
     const trimmedValue = value.trim();
     setCustomParams((prevParams) => {
@@ -203,12 +202,11 @@ const OciTestTool = () => {
     });
   };
 
-  //fuction to create the custom params fields and set data
   const handleAddCustomParams = () => {
     const newParam = { key: '', value: '', id: uuidv4(), prevKey: '' };
     setCustomParams((prevParams) => [...prevParams, newParam]);
   };
-  //fuction to remove the custom params fields and set data
+
   const handleRemoveParam = (index) => {
     setCustomParams((prevParams) => {
       const updatedParams = prevParams.filter((_, i) => i !== index);
@@ -217,7 +215,6 @@ const OciTestTool = () => {
     });
   };
 
-  //fuction to rest all the input fields and set data
   const handleReset = () => {
     setFormData({
       baseURL: '',
@@ -246,13 +243,10 @@ const OciTestTool = () => {
         }),
       });
 
-      // Check if the response status is OK
       if (response.ok) {
         const result = await response.json();
 
-        // Check if the response contains the updated URL
         if (result.success && result.response) {
-          // Display success message and open the updated URL
           setSuccessMessage(
             'The OCI PunchOut session will be open in a new window in a few seconds'
           );
@@ -261,18 +255,15 @@ const OciTestTool = () => {
           }, 6000);
 
           if (method === 'POST') {
-            // Create a hidden form to POST the data to result.response
             const form = document.createElement('form');
-            form.method = 'POST'; // Always POST, because we want to submit data
+            form.method = 'POST';
             form.action = result.response;
-            form.target = '_blank'; // Open in a new tab
+            form.target = '_blank';
 
-            // Add hidden inputs for POST data if necessary
             const hiddenInput = document.createElement('input');
             hiddenInput.type = 'hidden';
             form.appendChild(hiddenInput);
 
-            // You can append additional custom parameters here dynamically
             customParams.forEach((param) => {
               const paramInput = document.createElement('input');
               paramInput.type = 'hidden';
@@ -281,15 +272,13 @@ const OciTestTool = () => {
               form.appendChild(paramInput);
             });
 
-            // Submit the form
             document.body.appendChild(form);
             form.submit();
-            document.body.removeChild(form); // Clean up
+            document.body.removeChild(form);
           } else {
             window.open(result.response, '_blank');
           }
         } else {
-          // Handle the case where the URL is not returned as expected
           setErrorMessage('The Punchout URL was not retrieved!');
           setTimeout(() => {
             setErrorMessage('');
@@ -297,7 +286,6 @@ const OciTestTool = () => {
           setSuccessMessage('');
         }
       } else {
-        // Parse the error response from the backend
         const errorResult = await response.json();
         setErrorMessage(errorResult.message || 'An unknown error occurred.');
         setTimeout(() => {
@@ -306,7 +294,6 @@ const OciTestTool = () => {
         setSuccessMessage('');
       }
     } catch (error) {
-      // Handle any network errors or exceptions
       setErrorMessage(`An error occurred: ${error.message}`);
       setTimeout(() => {
         setErrorMessage('');
@@ -314,7 +301,6 @@ const OciTestTool = () => {
       setSuccessMessage('');
     }
   };
-
   return (
     <div className={styles.container}>
       <div className={styles.form}>
@@ -333,6 +319,7 @@ const OciTestTool = () => {
           <div className={styles.checkedBox}>
             <div className={styles.checkBoxlabel}>Use POST Method</div>
             <input
+            className={styles.checkboxIcon}
               type="checkbox"
               id="usePostMethod"
               checked={method === 'POST'}

@@ -1,5 +1,5 @@
 'use client'; // Indicates that this component is meant to run on the client-side only
-import { useState } from 'react'; // Import useState hook for state management
+import { useState, useEffect } from 'react'; // Import useState hook for state management
 import styles from './checkHeaders.module.css'; // Import CSS module for styling
 import JSONPretty from 'react-json-pretty'; // Import component for formatted JSON display
 
@@ -42,9 +42,15 @@ const CheckHeaders = () => {
   const [successMessage, setSuccessMessage] = useState(''); // Success message state
   const [responseData, setResponseData] = useState(null); // State for storing API response
 
-  setTimeout(() => {
-    setErrorMessage('');
-  }, 8000);
+  // remove error mesages after 8 secs.
+  useEffect(() => {
+    if (errorMessage) {
+      const timer = setTimeout(() => {
+        setErrorMessage('');
+      }, 8000);
+      return () => clearTimeout(timer); // Cleanup on unmount
+    }
+  }, [errorMessage]);
 
   // Function to validate the punchout URL
   const ValidateURL = () => {
@@ -92,7 +98,6 @@ const CheckHeaders = () => {
     if (!ValidateURL()) return; // Validate URL before sending request
 
     const { punchoutURL } = formData;
-    console.log('Punchout URL in send:', punchoutURL);
 
     try {
       setErrorMessage(''); // Clear any previous error messages
@@ -114,7 +119,6 @@ const CheckHeaders = () => {
         const contentType = response.headers.get('content-type');
         if (contentType && contentType.includes('application/json')) {
           const result = await response.json(); // Parse JSON response
-          console.log('Backend response:', result);
           setResponseData(result); // Update state with response data
           setErrorMessage(''); // Clear error on successful response
         } else {
@@ -131,7 +135,6 @@ const CheckHeaders = () => {
       }
     } catch (error) {
       setSuccessMessage('');
-      console.log(`An error occurred during sending data: ${error}`);
       setErrorMessage(`Currently we are not able to fetch data. Please try again later. 
         ${error.message}`); // Handle and display error
       setResponseData(null);

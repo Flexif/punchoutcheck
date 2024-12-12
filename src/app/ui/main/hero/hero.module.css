@@ -3,59 +3,34 @@
   align-items    : center;
   justify-content: flex-start;
   gap            : 20px;
+  cursor: default;
 }
 
 .first {
   display       : flex;
   flex-direction: column;
-  gap           : 50px;
-  flex          : 1;
-  text-align    : center;
-  outline       : 3px solid var(--bgLight);
-  background    : #a8c7fa74;
-  border-radius : 10px;
-  height        : 600px;
-}
-
-.second {
-  flex         : 1;
-  text-align   : center;
-  outline      : 3px solid var(--bgLight);
-  background   : #a8c7fa74;
-  height       : 600px;
-  border-radius: 10px;
-}
-
-.third {
-  flex         : 1;
-  text-align   : center;
-  outline      : 3px solid var(--bgLight);
-  background   : #a8c7fa74;
-  height       : 600px;
-  border-radius: 10px;
-}
-
-.fourth {
-  flex         : 1;
-  text-align   : center;
-  outline      : 3px solid var(--bgLight);
-  background   : #a8c7fa74;
-  height       : 600px;
-  border-radius: 10px;
+  justify-content: center;
+  flex-wrap: nowrap;
+  margin: 0 auto;
+  max-width: 60vw;
 }
 
 .title {
   padding                : 10px;
-  font-weight            : 500;
-  font-size              : 20px;
+  font-weight            : 200;
+  font-size              : 50px;
   color                  : var(--text);
   border-top-left-radius : 10px;
   border-top-right-radius: 10px;
   justify-content        : center;
   text-align             : center;
+  opacity: 0.5;
 }
 
 .content {
+  display: flex;
+  flex-direction: column;
+  gap: 100px;
   font-weight: 500;
   padding    : 0 20px;
   margin     : 0 auto;
@@ -64,16 +39,35 @@
   color      : var(--text);
 }
 
+.header {
+  font-size: 40px;
+  font-weight: 300;
+  color      : var(--text);
+  opacity: 0.5;
+}
+
+.context {
+  font-size: 30px;
+  font-weight: 300;
+  color      : var(--text);
+  opacity: 0.9;
+}
+
+.top,.bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  text-align: justify;
+  color      : var(--text);
+}
+
+
+
 .card {
   display       : flex;
   flex-direction: column;
   gap           : 50px;
   overflow      : hidden;
-}
-
-.first:hover,
-.second:hover,
-.third:hover,
-.fourth:hover {
-  outline: 3px solid var(--iconHover);
 }

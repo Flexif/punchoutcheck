@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styles from './checkIframe.module.css';
 
 const CheckIframe = () => {
@@ -9,10 +9,15 @@ const CheckIframe = () => {
   const [iframeUrl, setIframeUrl] = useState('');
   const [iframeLoadError, setIframeLoadError] = useState(false);
 
-  setTimeout(() => {
-    setErrorMessage('');
-  }, 6000);
-
+  // remove error message after 6 secs.
+  useEffect(() => {
+    if (errorMessage) {
+      const timer = setTimeout(() => {
+        setErrorMessage('');
+      }, 6000);
+      return () => clearTimeout(timer); // Cleanup timeout on component unmount
+    }
+  }, [errorMessage]);
 
   const handleInputChange = (e) => {
     setPunchoutURL(e.target.value);
@@ -52,7 +57,6 @@ const CheckIframe = () => {
     try {
       const objectUrl = new URL(punchoutURL); // Validate the URL
       setIframeUrl(objectUrl.origin); // Set URL for iframe
-      console.log(iframeUrl);
       setErrorMessage(''); // Clear any previous error message
       setIframeLoadError(false); // Reset iframe load error
     } catch (e) {

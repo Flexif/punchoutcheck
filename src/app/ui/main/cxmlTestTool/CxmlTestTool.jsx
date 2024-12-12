@@ -2,26 +2,23 @@
 import React, { useState, useEffect } from 'react';
 import styles from './cxmlTestTool.module.css';
 
+const generateTimestamp = () => {
+  const now = new Date();
+  return now.toISOString().replace('Z', '+00:00');
+};
+
+const generatePayloadID = () =>
+  (Math.random() * 1e15).toFixed(0).padStart(15, '0').slice(0, 15);
+
 const CxmlTestTool = () => {
   const backendURL = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
   const PosrURL = `${backendURL}/api/cxml-punchout`;
   const [errorMessage, setErrorMessage] = useState('');
   const [cxmlPayload, setCxmlPayload] = useState('');
-  // Generate payload ID
-  const generatePayloadID = () =>
-    (Math.random() * 1e15).toFixed(0).padStart(15, '0').slice(0, 15);
+  const [timestamp, setTimestamp] = useState(null);
+  const [payloadID, setPayloadID] = useState(null);
 
-  // Generate timestamp
-  const generateTimestamp = () => {
-    const now = new Date();
-    return now.toISOString().replace('Z', '+00:00');
-  };
-
-  // Clearing error message after 6 seconds
-  setTimeout(() => {
-    setErrorMessage('');
-  }, 6000);
-
+  // Initialize formData without timestamp and payloadID initially
   const [formData, setFormData] = useState({
     fromDomain: 'Network Id',
     fromIdentity: 'Buyer Identity',
@@ -30,8 +27,8 @@ const CxmlTestTool = () => {
     senderDomain: 'Network User Id',
     senderIdentity: 'Username',
     sharedSecret: 'Password',
-    PayloadId: generatePayloadID() + '@punchoutreports.com',
-    timeStamp: generateTimestamp(),
+    PayloadId: '',
+    timeStamp: '',
     supplierUrl: '',
     buyerUrl: `${backendURL}/api/cxml-data`,
     extrinsicUser: 'punchoutreports',
@@ -39,6 +36,35 @@ const CxmlTestTool = () => {
     extrinsicEmail: 'punchout.user@punchoutreports.com',
   });
 
+  // Generate timestamp and payload ID only on the client side (after mount)
+  useEffect(() => {
+    const generatedTimestamp = generateTimestamp();
+    const generatedPayloadID = generatePayloadID();
+    setTimestamp(generatedTimestamp);
+    setPayloadID(generatedPayloadID);
+  }, []);
+
+  // Update formData when timestamp and payloadID are available
+  useEffect(() => {
+    if (timestamp && payloadID) {
+      setFormData((prevData) => ({
+        ...prevData,
+        PayloadId: `${payloadID}@punchoutreports.com`,
+        timeStamp: timestamp,
+      }));
+    }
+  }, [timestamp, payloadID]);
+
+  // Clearing error message after 6 seconds
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setErrorMessage('');
+    }, 6000);
+
+    return () => clearTimeout(timeout); // Clean up the timeout on unmount
+  }, [errorMessage]);
+
+  // Update cXML payload when formData changes
   useEffect(() => {
     const updatedCxmlPayload = `<?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE cXML SYSTEM "http://xml.cxml.org/schemas/cXML/1.2.014/cXML.dtd">
@@ -82,8 +108,7 @@ const CxmlTestTool = () => {
           </SupplierSetup>
            <ShipTo>
                 <Address>
-                    <Name xml:lang="en">Optional
-                    </Name>
+                    <Name xml:lang="en">Optional</Name>
                     <PostalAddress>
                         <DeliverTo>Optional</DeliverTo>
                         <Street>1301 Dove</Street>
@@ -136,9 +161,6 @@ const CxmlTestTool = () => {
   };
 
   const handleSend = async () => {
-    // Get the session ID from local storage
-    const sessionId = localStorage.getItem('sessionId');
-
     try {
       if (!formData.supplierUrl) {
         setErrorMessage('Please enter a valid URL with the HTTP(S) protocol.');
@@ -158,7 +180,6 @@ const CxmlTestTool = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json', // Sending JSON data
-          'Session-ID': sessionId, // sending the session id to backend
         },
         body: JSON.stringify({
           cxmlPayload,
@@ -174,13 +195,11 @@ const CxmlTestTool = () => {
 
       // Convert response to text
       const responseData = await response.text();
-      console.log('Raw response data:', responseData);
 
       // Extract URL using regular expressions
       const urlMatch = responseData.match(/<URL>(.*?)<\/URL>/);
       if (urlMatch && urlMatch[1]) {
         const extractedUrl = urlMatch[1].replace(/&amp;/g, '&'); // Replace HTML entities with their actual characters
-        console.log('Extracted URL:', extractedUrl);
 
         // Open the URL in a new window or tab
         window.open(extractedUrl, '_blank');
@@ -250,7 +269,7 @@ const CxmlTestTool = () => {
       // Optionally log the error, but do not set an error message in the state
     }
   };
-
+  
   return (
     <div className={styles.container}>
       <div className={styles.inputsPunchout}>

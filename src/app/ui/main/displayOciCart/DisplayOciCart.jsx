@@ -52,7 +52,6 @@ const DisplayOciCart = () => {
           const response = await fetch(`${backendURL}/api/oci-data/${cartId}`);
           if (response.ok) {
             const data = await response.json();
-            console.log('Fetched cart data:', data);
             setCartData(data.data);
           } else {
             setError(`Failed to fetch data: ${response.statusText}`);

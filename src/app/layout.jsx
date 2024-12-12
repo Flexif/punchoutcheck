@@ -20,17 +20,17 @@ export const generateViewport = () => ({
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
+    <html lang="en" suppressHydrationWarning={true}>
+      <body className={inter.className} suppressHydrationWarning={true}>
         <div className={styles.container}>
           <div className={styles.navbar}>
-            <Navbar />
+            <Navbar/>
           </div>
           <div className={styles.content}>
             <div className={styles.opacity}>{children}</div>
           </div>
           <div className={styles.footer}>
-            <VisitorCount />
+            <VisitorCount/>
             <div>
               © 2024 Punchout Reports. All rights reserved by Punchout Reports.
             </div>
