@@ -46,7 +46,7 @@ const OciTestTool = () => {
     }
   };
 
-  // Extracting queries from the BaseURL
+  // Extracting queries from the BaseURL to fill in the dedicated fileds
   const extractParamsFromURL = (baseURL) => {
     if (!baseURL) return;
   
