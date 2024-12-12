@@ -49,25 +49,33 @@ const OciTestTool = () => {
   // Extracting queries from the BaseURL
   const extractParamsFromURL = (baseURL) => {
     if (!baseURL) return;
-
+  
     if (validateURL(baseURL)) {
       try {
         const url = new URL(baseURL);
         const searchParams = new URLSearchParams(url.search);
-
+  
+        // Normalize keys to lowercase for comparison but keep values as-is
+        const paramsMap = {};
+        for (const [key, value] of searchParams.entries()) {
+          paramsMap[key.toLowerCase()] = value; // Lowercase the key only
+        }
+  
+        // Extract form data (using lowercase keys)
         setFormData((prevData) => ({
           ...prevData,
-          username: searchParams.get('username') || '',
-          password: searchParams.get('password') || '',
-          hookURL: searchParams.get('hook_url') || '',
+          username: paramsMap['username'] || '', // Case-insensitive lookup
+          password: paramsMap['password'] || '', // Case-insensitive lookup
+          hookURL: paramsMap['hook_url'] || '', // Case-insensitive lookup
         }));
-
+  
+        // Extract custom params, preserving original key names
         const updatedCustomParams = Array.from(searchParams.entries())
           .filter(
-            ([key]) => !['username', 'password', 'hook_url'].includes(key)
+            ([key]) => !['username', 'password', 'hook_url'].includes(key.toLowerCase())
           )
           .map(([key, value]) => ({ key, value, id: uuidv4(), prevKey: key }));
-
+  
         setCustomParams((prevParams) => {
           if (
             JSON.stringify(prevParams) !== JSON.stringify(updatedCustomParams)
@@ -88,6 +96,7 @@ const OciTestTool = () => {
       setErrorMessage('');
     }
   };
+  
 
   const debouncedExtractParamsFromURL = useCallback(
     debounce((baseURL) => {
