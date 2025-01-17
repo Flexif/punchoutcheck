@@ -8,8 +8,6 @@
 
 .logoContainer {
   display         : flex;
-  background-color: var(--bgColor);
-  outline         : 6px solid var(--iconHover);
   border-radius   : 50%;
   min-height      : 4px;
   min-width       : 40px;
@@ -17,17 +15,27 @@
 
 .logo {
   background-color: rgba(0, 0, 0, 0.05);
-  outline         : 1px solid var(--iconHover);
+  outline         : 1px solid var(--iconHoverSec);
   border-radius   : 100px;
   display         : flex;
   justify-content : center;
   gap             : 5px;
 }
 
+@keyframes rotate-clockwise {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 .img {
-  padding        : 3px;
-  text-align     : center;
+  padding: 5px;
+  text-align: center;
   justify-content: center;
+  animation: rotate-clockwise 10s linear infinite; /* Adjust duration for slower or faster rotation */
 }
 
 .links {

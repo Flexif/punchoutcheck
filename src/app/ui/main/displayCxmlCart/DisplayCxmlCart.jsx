@@ -6,6 +6,7 @@ import { MdOutlineExpandCircleDown } from 'react-icons/md';
 import { IoChevronUpCircleOutline } from 'react-icons/io5';
 import { FcInfo } from 'react-icons/fc';
 
+
 const DisplayCxmlCart = () => {
   const backendURL = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
   const [infoMessage, setInfoMessage] = useState('');

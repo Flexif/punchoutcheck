@@ -4,6 +4,7 @@ import debounce from 'lodash.debounce';
 import { v4 as uuidv4 } from 'uuid';
 import styles from './ociTestTool.module.css';
 import { CiCircleRemove } from 'react-icons/ci';
+import Buffering from '../buffer/BufferComponent';
 
 const OciTestTool = () => {
   const backendURL = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
@@ -12,6 +13,7 @@ const OciTestTool = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [sucessMessage, setSuccessMessage] = useState('');
   const [customParams, setCustomParams] = useState([]); // Start with an empty array
+  const [isLoading, setIsLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     baseURL: '', // Initialize as an empty string
@@ -31,6 +33,7 @@ const OciTestTool = () => {
       new URL(url);
       return true;
     } catch (error) {
+      setIsLoading(false);
       return false;
     }
   };
@@ -38,6 +41,7 @@ const OciTestTool = () => {
   const handleOnBlur = () => {
     if (!validateURL(formData.baseURL)) {
       setErrorMessage('Please enter a valid URL with the HTTP(S) protocol.');
+      setIsLoading(false);
       setTimeout(() => {
         setErrorMessage('');
       }, 6000);
@@ -49,7 +53,7 @@ const OciTestTool = () => {
   // Extracting queries from the BaseURL to fill in the dedicated fileds
   const extractParamsFromURL = (baseURL) => {
     if (!baseURL) return;
-  
+    setIsLoading(false);
     if (validateURL(baseURL)) {
       try {
         const url = new URL(baseURL);
@@ -88,6 +92,7 @@ const OciTestTool = () => {
         });
       } catch (error) {
         setErrorMessage('Invalid URL format');
+        setIsLoading(false);
         setTimeout(() => {
           setErrorMessage('');
         }, 6000);
@@ -148,6 +153,7 @@ const OciTestTool = () => {
         baseURL: newBaseURL,
       }));
     } catch (error) {
+      setIsLoading(false);
       setErrorMessage('');
     }
   };
@@ -236,7 +242,7 @@ const OciTestTool = () => {
 
   const handleSend = async () => {
     const { baseURL, username, password, hookURL } = formData;
-
+    setIsLoading(true); // Activate the spinner
     try {
       const response = await fetch(`${backendURL}/api/oci-roundtrip`, {
         method: 'POST',
@@ -253,6 +259,7 @@ const OciTestTool = () => {
       });
 
       if (response.ok) {
+        setIsLoading(false); // Deactivate the spinner
         const result = await response.json();
 
         if (result.success && result.response) {
@@ -289,12 +296,14 @@ const OciTestTool = () => {
           }
         } else {
           setErrorMessage('The Punchout URL was not retrieved!');
+          setIsLoading(false);
           setTimeout(() => {
             setErrorMessage('');
           }, 6000);
           setSuccessMessage('');
         }
       } else {
+        setIsLoading(false);
         const errorResult = await response.json();
         setErrorMessage(errorResult.message || 'An unknown error occurred.');
         setTimeout(() => {
@@ -303,6 +312,7 @@ const OciTestTool = () => {
         setSuccessMessage('');
       }
     } catch (error) {
+      setIsLoading(false);
       setErrorMessage(`An error occurred: ${error.message}`);
       setTimeout(() => {
         setErrorMessage('');
@@ -431,6 +441,7 @@ const OciTestTool = () => {
         <button className={styles.btn} onClick={handleSend}>
           Send
         </button>
+        <Buffering isActive={isLoading} />
       </div>
     </div>
   );

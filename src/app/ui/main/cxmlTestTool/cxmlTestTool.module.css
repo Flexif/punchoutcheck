@@ -95,11 +95,11 @@
 }
 
 .textarea:focus {
-  box-shadow: 0 0 10px var(--iconHover);
+  box-shadow: 0 0 10px var(--iconHoverSec);
 }
 
 .textarea:hover {
-  box-shadow: 0 0 10px var(--iconHover);
+  box-shadow: 0 0 10px var(--iconHoverSec);
 }
 
 .span {
@@ -110,7 +110,7 @@
 }
 
 .hr {
-  border-bottom: 1px solid var(--iconHover);
+  border-bottom: 1px solid var(--textLight);
   width        : 90%;
 }
 
@@ -139,5 +139,5 @@
 
 .inputs:hover,
 .inputsPunchout:hover {
-  box-shadow: 0 0 10px var(--iconHover);
+  box-shadow: 0 0 10px var(--iconHoverSec);
 }

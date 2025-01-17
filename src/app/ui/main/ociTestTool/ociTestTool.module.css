@@ -177,6 +177,6 @@
 }
 
 .inputs:hover,
-.inputsPunchout:hover {
-  box-shadow: 0 0 10px var(--iconHover);
+.inputsPunchout:hover, .customInputs:hover {
+  box-shadow: 0 0 10px var(--iconHoverSec);
 }

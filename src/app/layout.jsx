@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ['latin'] });
 
 // Isolated and simplified metadata for testing purposes
 export const metadata = {
-  title: 'Punchout Reports',
+  title: 'Punchout Tools',
   description: 'Simplified Metadata Test',
 };
 

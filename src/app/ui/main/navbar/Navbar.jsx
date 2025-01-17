@@ -48,7 +48,7 @@ const Navbar = () => {
       <div className={styles.logo}>
         <div className={styles.logoContainer}>
           <Image
-            src="/punchout.png"
+            src="/android-chrome-512x512.png"
             width={50}
             height={50}
             alt="logo"

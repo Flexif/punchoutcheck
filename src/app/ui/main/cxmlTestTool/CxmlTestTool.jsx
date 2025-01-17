@@ -1,6 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import styles from './cxmlTestTool.module.css';
+import Buffering from '../buffer/BufferComponent';
 
 const generateTimestamp = () => {
   const now = new Date();
@@ -17,6 +18,7 @@ const CxmlTestTool = () => {
   const [cxmlPayload, setCxmlPayload] = useState('');
   const [timestamp, setTimestamp] = useState(null);
   const [payloadID, setPayloadID] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Initialize formData without timestamp and payloadID initially
   const [formData, setFormData] = useState({
@@ -31,9 +33,9 @@ const CxmlTestTool = () => {
     timeStamp: '',
     supplierUrl: '',
     buyerUrl: `${backendURL}/api/cxml-data`,
-    extrinsicUser: 'punchoutreports',
-    extrinsicUsername: 'punchoutreports',
-    extrinsicEmail: 'punchout.user@punchoutreports.com',
+    extrinsicUser: 'punchouttools',
+    extrinsicUsername: 'punchouttools',
+    extrinsicEmail: 'punchout.user@punchouttools.com',
   });
 
   // Generate timestamp and payload ID only on the client side (after mount)
@@ -49,7 +51,7 @@ const CxmlTestTool = () => {
     if (timestamp && payloadID) {
       setFormData((prevData) => ({
         ...prevData,
-        PayloadId: `${payloadID}@punchoutreports.com`,
+        PayloadId: `${payloadID}@punchouttools.com`,
         timeStamp: timestamp,
       }));
     }
@@ -85,14 +87,14 @@ const CxmlTestTool = () => {
             <Identity>${formData.senderIdentity}</Identity>
             <SharedSecret>${formData.sharedSecret}</SharedSecret>
           </Credential>
-          <UserAgent>Coupa Procurement 1.0</UserAgent>
+          <UserAgent>punchout</UserAgent>
         </Sender>
       </Header>
       <Request>
         <PunchOutSetupRequest operation="create">
           <BuyerCookie>99ea3c4c8cf9f6dc905a6b6772daa0d1</BuyerCookie>
           <Extrinsic name="FirstName">Punchout</Extrinsic>
-          <Extrinsic name="LastName">Tester</Extrinsic>
+          <Extrinsic name="LastName">Tools</Extrinsic>
           <Extrinsic name="UniqueName">${formData.extrinsicUsername}</Extrinsic>
           <Extrinsic name="User">${formData.extrinsicUser}</Extrinsic>
           <Extrinsic name="UserEmail">${formData.extrinsicEmail}</Extrinsic>
@@ -111,8 +113,8 @@ const CxmlTestTool = () => {
                     <Name xml:lang="en">Optional</Name>
                     <PostalAddress>
                         <DeliverTo>Optional</DeliverTo>
-                        <Street>1301 Dove</Street>
-                        <City>Newport Beach</City>
+                        <Street>1301 Optional</Street>
+                        <City>Optional</City>
                         <State>CA</State>
                         <PostalCode>92660</PostalCode>
                         <Country isoCountryCode="US">US</Country>
@@ -149,32 +151,34 @@ const CxmlTestTool = () => {
       senderDomain: 'Network User Id',
       senderIdentity: 'Username',
       sharedSecret: 'Password',
-      PayloadId: generatePayloadID() + '@punchoutreports.com',
+      PayloadId: generatePayloadID() + '@punchouttools.com',
       timeStamp: generateTimestamp(),
       supplierUrl: '',
       buyerUrl: formData.buyerUrl,
-      extrinsicUser: 'punchoutreports',
-      extrinsicUsername: 'punchoutreports',
-      extrinsicEmail: 'user@punchoutreports.com',
+      extrinsicUser: 'punchouttools',
+      extrinsicUsername: 'punchouttools',
+      extrinsicEmail: 'user@punchouttools.com',
     });
     setErrorMessage(''); // Clear any previous error messages on reset
   };
 
   const handleSend = async () => {
-    try {
+   
       if (!formData.supplierUrl) {
         setErrorMessage('Please enter a valid URL with the HTTP(S) protocol.');
+        setIsLoading(false);
         return;
       }
 
       if (!cxmlPayload) {
         setErrorMessage('cXML Payload is missing');
+        setIsLoading(false);
         return; // No need to throw an error, we are handling it with state
       }
-
       // Clear any previous error messages before sending the request
       setErrorMessage('');
-
+      setIsLoading(true); // Activate the spinner
+      try {
       // Send POST request to the backend
       const response = await fetch(PosrURL, {
         method: 'POST',
@@ -182,38 +186,34 @@ const CxmlTestTool = () => {
           'Content-Type': 'application/json', // Sending JSON data
         },
         body: JSON.stringify({
+          formData,
           cxmlPayload,
           supplierUrl: formData.supplierUrl.trim(),
         }),
       });
-
-      // Ensure response is OK
-      if (!response.ok) {
-        setErrorMessage('Please enter a valid Punchout URL');
-        return;
+      if (response.ok) {
+        setIsLoading(false); // Deactivate the spinner
+         // Convert response to text
+        const responseData = await response.text();
+         // Extract URL using regular expressions
+        const urlMatch = responseData.match(/<URL>(.*?)<\/URL>/);
+        if (urlMatch && urlMatch[1]) {
+          const extractedUrl = urlMatch[1].replace(/&amp;/g, '&'); // Replace HTML entities with their actual characters
+  
+          // Open the URL in a new window or tab
+          window.open(extractedUrl, '_blank');
       }
-
-      // Convert response to text
-      const responseData = await response.text();
-
-      // Extract URL using regular expressions
-      const urlMatch = responseData.match(/<URL>(.*?)<\/URL>/);
-      if (urlMatch && urlMatch[1]) {
-        const extractedUrl = urlMatch[1].replace(/&amp;/g, '&'); // Replace HTML entities with their actual characters
-
-        // Open the URL in a new window or tab
-        window.open(extractedUrl, '_blank');
-      } else {
-        setErrorMessage('No response received from the punchout endpoint');
-        console.error('URL element not found in the response');
-      }
+    } else {
+      setIsLoading(false);
+      const errorResult = await response.json();
+      setErrorMessage(errorResult.message || 'An unknown error occurred.');
+      setTimeout(() => {
+        setErrorMessage('');
+      }, 6000);
+    }
     } catch (error) {
-      setErrorMessage(
-        'No response has been received from the following ' +
-          `${formData.supplierUrl}` +
-          '. Please make sure that you have entered a valid punchOut URL.'
-      );
-      console.error('Request failed:', error);
+      setIsLoading(false);
+      setErrorMessage(`An error occurred: ${error.message}`);
     }
   };
 
@@ -265,6 +265,7 @@ const CxmlTestTool = () => {
 
       setFormData(newFormData);
     } catch (error) {
+      setIsLoading(false);
       console.error('Error parsing cXML:', error);
       // Optionally log the error, but do not set an error message in the state
     }
@@ -331,6 +332,7 @@ const CxmlTestTool = () => {
         <button type="button" className={styles.btn} onClick={handleSend}>
           Send
         </button>
+        <Buffering isActive={isLoading} />
       </div>
     </div>
   );

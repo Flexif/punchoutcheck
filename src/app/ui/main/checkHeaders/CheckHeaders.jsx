@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'; // Import useState hook for state management
 import styles from './checkHeaders.module.css'; // Import CSS module for styling
 import JSONPretty from 'react-json-pretty'; // Import component for formatted JSON display
+import Buffering from '../buffer/BufferComponent';
 
 // Define custom styles for JSONPretty component
 const customTheme = {
@@ -34,6 +35,8 @@ const safeStringify = (obj) => {
 const CheckHeaders = () => {
   const backendURL = process.env.NEXT_PUBLIC_BACKEND_BASE_URL; // Retrieve backend URL from environment variables
 
+  // Buffering layer
+  const [isLoading, setIsLoading] = useState(false);
   // State hooks for form data, messages, and response data
   const [formData, setFormData] = useState({
     punchoutURL: '', // URL input by the user
@@ -100,9 +103,9 @@ const CheckHeaders = () => {
     const { punchoutURL } = formData;
 
     try {
+       // Activate the spinner
       setErrorMessage(''); // Clear any previous error messages
-      setSuccessMessage('The result will appear here shortly.');
-
+      setIsLoading(true);
       // Send POST request to backend API
       const response = await fetch(`${backendURL}/api/check-headers`, {
         method: 'POST',
@@ -115,6 +118,7 @@ const CheckHeaders = () => {
       });
 
       if (response.ok) {
+        setIsLoading(false);
         // Check if response is successful
         const contentType = response.headers.get('content-type');
         if (contentType && contentType.includes('application/json')) {
@@ -122,22 +126,26 @@ const CheckHeaders = () => {
           setResponseData(result); // Update state with response data
           setErrorMessage(''); // Clear error on successful response
         } else {
+          setIsLoading(false);
           setErrorMessage('Data sent, but the response is not JSON.'); // Handle non-JSON response
           setResponseData(null);
         }
       } else {
+        setIsLoading(false);
         const result = await response.json(); // Parse JSON response if the response is not ok
         setSuccessMessage('');
         setErrorMessage(
           `Failed to retrieve data. ${result.error} ${result.details}`
         ); // Set error message
         setResponseData(null);
+        
       }
     } catch (error) {
       setSuccessMessage('');
       setErrorMessage(`Currently we are not able to fetch data. Please try again later. 
         ${error.message}`); // Handle and display error
       setResponseData(null);
+      setIsLoading(false);
     }
   };
 
@@ -281,6 +289,11 @@ const CheckHeaders = () => {
                 onChange={handleChange}
                 onBlur={handleOnBlur}
                 placeholder="Paste your URL here ..."
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    handleSend();
+                  }
+                }}
               />
             </div>
             {/* Display messages */}
@@ -314,6 +327,7 @@ const CheckHeaders = () => {
             >
               Send
             </button>
+            <Buffering isActive={isLoading} />
           </div>
         </>
       )}

@@ -20,7 +20,7 @@
 }
 
 .content {
-  padding   : 20px;
+  padding   : 30px 40px;
   flex      : 6;
   min-height: 100vh;
 }

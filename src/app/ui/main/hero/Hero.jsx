@@ -7,7 +7,7 @@ const Hero = () => {
     <div className={styles.container}>
       <div className={styles.first}>
         <div className={styles.card}>
-          <div className={styles.title}>Welcome to PunchOut Reports</div>
+          <div className={styles.title}>Welcome to PunchOut Tools</div>
           <div className={styles.content}>
             <div className={styles.top}>
               <div className={styles.header}>Our Mission</div>

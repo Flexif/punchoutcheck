@@ -92,6 +92,11 @@ const CheckIframe = () => {
             placeholder="Paste your URL here ..."
             autoComplete="yes"
             onBlur={onBlurHandle}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                handleCheckBtn();
+              }
+            }}
           />
         </div>
         {iframeUrl && !errorMessage ? (
