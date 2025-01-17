@@ -32,7 +32,7 @@ export default function RootLayout({ children }) {
           <div className={styles.footer}>
             <VisitorCount/>
             <div>
-              © 2024 Punchout Reports. All rights reserved by Punchout Reports.
+              © 2025 Punchout Tools. All rights reserved by Punchout Tools.
             </div>
           </div>
         </div>
