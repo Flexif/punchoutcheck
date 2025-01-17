@@ -17,11 +17,18 @@
 
 .title {
   padding                : 10px;
-  font-weight            : 200;
+  font-weight            : 300;
   font-size              : 40px;
   color                  : var(--text);
-  border-top-left-radius : 10px;
-  border-top-right-radius: 10px;
+  justify-content        : center;
+  text-align             : center;
+  opacity: 0.5;
+}
+.motto{
+  padding                : 10px;
+  font-weight            : 300;
+  font-size              : 35px;
+  color                  : var(--text);
   justify-content        : center;
   text-align             : center;
   opacity: 0.5;

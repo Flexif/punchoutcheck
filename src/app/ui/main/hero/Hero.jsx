@@ -8,6 +8,7 @@ const Hero = () => {
       <div className={styles.first}>
         <div className={styles.card}>
           <div className={styles.title}>Welcome to PunchOut Tools</div>
+          
           <div className={styles.content}>
             <div className={styles.top}>
               <div className={styles.header}>Our Mission</div>
@@ -18,6 +19,7 @@ const Hero = () => {
                 experiences for suppliers and buyers alike.
               </div>
             </div>
+            <div className={styles.motto}>Test the Connection. Make the Connection</div>
             <div className={styles.bottom}>
               <div className={styles.header}>Our Vision</div>
               <div className={styles.context}>
