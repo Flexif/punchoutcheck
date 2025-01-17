@@ -141,7 +141,7 @@ const CxmlTestTool = () => {
       [name]: value,
     }));
   };
-
+// handling reset button
   const handleReset = () => {
     setFormData({
       fromDomain: 'Network Id',
@@ -161,7 +161,7 @@ const CxmlTestTool = () => {
     });
     setErrorMessage(''); // Clear any previous error messages on reset
   };
-
+// handling send button 
   const handleSend = async () => {
    
       if (!formData.supplierUrl) {
