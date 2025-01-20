@@ -35,4 +35,6 @@
   min-height      : 30px;
   color           : var(--text);
   font-size       : 12px;
+  box-shadow      : 0 1px 2px 3px var(--iconHover);
+  
 }

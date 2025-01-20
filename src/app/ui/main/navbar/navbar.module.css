@@ -4,6 +4,7 @@
   gap           : 10px;
   width         : 85%;
   flex-wrap     : wrap;
+  
 }
 
 .logoContainer {
@@ -15,11 +16,12 @@
 
 .logo {
   background-color: rgba(0, 0, 0, 0.05);
-  outline         : 1px solid var(--iconHoverSec);
+  outline         : 1px solid var(--iconHover);
   border-radius   : 100px;
   display         : flex;
   justify-content : center;
   gap             : 5px;
+  box-shadow       : 0 0 5px 3px var(--iconHover);
 }
 
 .img {
