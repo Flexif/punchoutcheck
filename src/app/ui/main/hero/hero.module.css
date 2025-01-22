@@ -3,71 +3,110 @@
   align-items    : center;
   justify-content: flex-start;
   gap            : 10px;
-  cursor: default;
+  cursor         : default;
 }
 
 .first {
-  display       : flex;
-  flex-direction: column;
+  display        : flex;
+  flex-direction : column;
   justify-content: center;
-  flex-wrap: nowrap;
-  margin: 0 auto;
-  max-width: 60vw;
+  flex-wrap      : nowrap;
+  margin         : 0 auto;
+  max-width      : 60vw;
 }
 
-.title {
-  padding                : 10px;
-  font-weight            : 300;
-  font-size              : 40px;
-  color                  : var(--text);
-  justify-content        : center;
-  text-align             : center;
-  opacity: 0.5;
+.mottoBox {
+  display         : flex;
+  justify-content : center;
+  align-items     : center;
+  height          : 100%;
+  /* Adjust based on your container */
+  width           : 100%;
+  /* Adjust based on your container */
+  background-color: var(--iconHover);
+  box-shadow      : 0 0 10px 2px var(--iconHover);
+  opacity         : 0.5;
+  border-radius   : 20px;
 }
-.motto{
-  padding                : 10px;
-  font-weight            : 300;
-  font-size              : 35px;
-  color                  : var(--text);
-  justify-content        : center;
-  text-align             : center;
-  opacity: 0.5;
+
+.motto {
+  font-weight : 300;
+  font-size   : 50px;
+  color       : var(--textLight);
+  text-align  : center;
+  overflow    : hidden;
+  /* Ensure the text stays within bounds */
+  white-space : nowrap;
+  /* Prevent text wrapping */
+  display     : inline-block;
+  /* Ensure the text doesn't stretch */
+  animation   : typing 5s steps(100, end) infinite, blink 1s step-end infinite alternate;
+  border-right: 5px solid var(--bgLight);
+  /* Simulate a typing cursor */
+  max-width   : fit-content;
 }
+
+@keyframes typing {
+  from {
+    width: 0;
+  }
+
+  to {
+    width    : 100%;
+    /* Adjust to match the desired text length */
+    transform: translateX(0);
+    /* Reset to natural position */
+  }
+}
+
+/* Keyframes for blinking cursor effect */
+@keyframes blink {
+  from {
+    border-color: rgba(55, 55, 55, 0.329);
+
+  }
+
+  to {
+    border-color: transparent;
+  }
+}
+
 
 .content {
-  display: flex;
+  display       : flex;
   flex-direction: column;
-  gap: 50px;
-  font-weight: 500;
-  padding    : 0 20px;
-  margin     : 0 auto;
-  font-size  : 15px;
-  text-align : left;
-  color      : var(--text);
+  gap           : 50px;
+  font-weight   : 500;
+  padding       : 0 20px;
+  margin        : 0 auto;
+  font-size     : 15px;
+  text-align    : left;
+  color         : var(--text);
 }
 
 .header {
-  font-size: 30px;
+  font-size  : 30px;
   font-weight: 300;
   color      : var(--text);
-  opacity: 0.5;
+  opacity    : 0.5;
 }
 
 .context {
-  font-size: 30px;
+  font-size  : 30px;
   font-weight: 300;
   color      : var(--text);
-  opacity: 0.9;
+  opacity    : 0.9;
 }
 
-.top,.bottom {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+.top,
+.bottom {
+  display        : flex;
+  flex-direction : column;
+  gap            : 10px;
   justify-content: center;
-  align-items: center;
-  text-align: justify;
-  color      : var(--text);
+  align-items    : center;
+  text-align     : justify;
+  color          : var(--text);
 }
 
 

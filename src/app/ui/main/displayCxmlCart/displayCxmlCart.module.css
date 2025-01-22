@@ -168,19 +168,17 @@
 }
 
 .table {
-  width          : 100%;
-  border-collapse: collapse;
-  color          : var(--textLight);
-  margin-top     : 20px;
-  border-radius  : 5px;
+  width           : 100%;
+  border-collapse : collapse;
+  color           : var(--textLight);
+  margin-top      : 20px;
 }
 
 .thTitles {
   font-size  : 14px;
   font-family: inherit;
-
-  color     : var(--textLight);
-  text-align: center;
+  color      : var(--textLight);
+  text-align : center;
 }
 
 .table th,
