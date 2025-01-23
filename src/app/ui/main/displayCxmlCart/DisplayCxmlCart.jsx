@@ -73,10 +73,11 @@ const DisplayCxmlCart = () => {
           setXmlData(data.xml);
           setJsonData(data.json);
         } else {
-          setError('Failed to fetch data');
+          const errorData = await response.json(); // Parse error response body
+          setError(errorData.message || "An error occurred while retrieving the cart payload");
         }
       } catch (error) {
-        setError('Failed to fetch data');
+        setError(error.message || "A network error occurred");
       } finally {
         setLoading(false);
       }
@@ -87,15 +88,15 @@ const DisplayCxmlCart = () => {
 
   // Conditional rendering based on loading and error states
   if (loading) {
-    return <div className={styles.container}>Loading...</div>;
+    return <div className={styles.loading}>Loading...</div>;
   }
 
   if (error) {
-    return <div className={styles.container}>Error: {error}</div>;
+    return <div className={styles.infoError}>{error}</div>;
   }
 
   if (!jsonData || !xmlData) {
-    return <div className={styles.container}>No data found.</div>;
+    return <div className={styles.Error}>No data available</div>;
   }
 
   const { cXML } = jsonData;

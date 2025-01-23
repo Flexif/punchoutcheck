@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from './cxmlTestTool.module.css';
 import Buffering from '../buffer/BufferComponent';
+import { CiCircleRemove } from 'react-icons/ci';
 
 const generateTimestamp = () => {
   const now = new Date();
@@ -141,7 +142,7 @@ const CxmlTestTool = () => {
       [name]: value,
     }));
   };
-// handling reset button
+  // handling reset button
   const handleReset = () => {
     setFormData({
       fromDomain: 'Network Id',
@@ -161,24 +162,23 @@ const CxmlTestTool = () => {
     });
     setErrorMessage(''); // Clear any previous error messages on reset
   };
-// handling send button 
+  // handling send button
   const handleSend = async () => {
-   
-      if (!formData.supplierUrl) {
-        setErrorMessage('Please enter a valid URL with the HTTP(S) protocol.');
-        setIsLoading(false);
-        return;
-      }
+    if (!formData.supplierUrl) {
+      setErrorMessage('Please enter a valid URL with the HTTP(S) protocol.');
+      setIsLoading(false);
+      return;
+    }
 
-      if (!cxmlPayload) {
-        setErrorMessage('cXML Payload is missing');
-        setIsLoading(false);
-        return; // No need to throw an error, we are handling it with state
-      }
-      // Clear any previous error messages before sending the request
-      setErrorMessage('');
-      setIsLoading(true); // Activate the spinner
-      try {
+    if (!cxmlPayload) {
+      setErrorMessage('cXML Payload is missing');
+      setIsLoading(false);
+      return; // No need to throw an error, we are handling it with state
+    }
+    // Clear any previous error messages before sending the request
+    setErrorMessage('');
+    setIsLoading(true); // Activate the spinner
+    try {
       // Send POST request to the backend
       const response = await fetch(PosrURL, {
         method: 'POST',
@@ -193,24 +193,31 @@ const CxmlTestTool = () => {
       });
       if (response.ok) {
         setIsLoading(false); // Deactivate the spinner
-         // Convert response to text
+        // Convert response to text
         const responseData = await response.text();
-         // Extract URL using regular expressions
+        // Extract URL using regular expressions
         const urlMatch = responseData.match(/<URL>(.*?)<\/URL>/);
         if (urlMatch && urlMatch[1]) {
           const extractedUrl = urlMatch[1].replace(/&amp;/g, '&'); // Replace HTML entities with their actual characters
-  
           // Open the URL in a new window or tab
           window.open(extractedUrl, '_blank');
+        } else {
+          const statusMatch = responseData.match(
+            /<Status[^>]*>\s*([^<]*)\s*<\/Status>/
+          );
+          const statusText = statusMatch
+            ? statusMatch[1].trim()
+            : 'An unknown error occurred.';
+          setErrorMessage(`Error: ${statusText}.`);
+        }
+      } else {
+        setIsLoading(false);
+        const errorResult = await response.json();
+        setErrorMessage(errorResult.message || 'An unknown error occurred.');
+        setTimeout(() => {
+          setErrorMessage('');
+        }, 6000);
       }
-    } else {
-      setIsLoading(false);
-      const errorResult = await response.json();
-      setErrorMessage(errorResult.message || 'An unknown error occurred.');
-      setTimeout(() => {
-        setErrorMessage('');
-      }, 6000);
-    }
     } catch (error) {
       setIsLoading(false);
       setErrorMessage(`An error occurred: ${error.message}`);
@@ -270,7 +277,12 @@ const CxmlTestTool = () => {
       // Optionally log the error, but do not set an error message in the state
     }
   };
-  
+
+  const handleCloseError = () => {
+    setErrorMessage('');
+  };
+
+
   return (
     <div className={styles.container}>
       <div className={styles.inputsPunchout}>
@@ -285,13 +297,6 @@ const CxmlTestTool = () => {
           autoComplete="off"
           placeholder="Paste your Punchout URL here ..."
         />
-      </div>
-      <div>
-        {errorMessage === '' ? (
-          ''
-        ) : (
-          <div className={styles.errorMessage}>{errorMessage}</div>
-        )}
       </div>
       <div className={styles.span}>
         Credentials
@@ -325,15 +330,22 @@ const CxmlTestTool = () => {
           />
         </div>
       </div>
-      <div className={styles.btnContainer}>
-        <button type="button" className={styles.btn} onClick={handleReset}>
-          Reset
-        </button>
-        <button type="button" className={styles.btn} onClick={handleSend}>
-          Send
-        </button>
-        <Buffering isActive={isLoading} />
-      </div>
+      {errorMessage === '' ? (
+        <div className={styles.btnContainer}>
+          <button type="button" className={styles.btn} onClick={handleReset}>
+            Reset
+          </button>
+          <button type="button" className={styles.btn} onClick={handleSend}>
+            Send
+          </button>
+          <Buffering isActive={isLoading} />
+        </div>
+      ) : (
+        <div className={styles.errorMessage}>
+          {errorMessage}
+          <CiCircleRemove size={26} onClick={handleCloseError} />
+        </div>
+      )}
     </div>
   );
 };

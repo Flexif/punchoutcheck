@@ -6,12 +6,16 @@
 }
 
 .errorMessage {
+  display         : flex;
+  align-items     : center;
+  justify-content : space-between;
   background-color: var(--warn);
   border-radius   : 3px;
   color           : var(--textLight);
   padding         : 3px 5px;
   font-weight     : 500;
   font-size       : 15px;
+  margin-top: 20px;
 }
 
 .form {

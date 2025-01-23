@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'; // Import useState hook for state m
 import styles from './checkHeaders.module.css'; // Import CSS module for styling
 import JSONPretty from 'react-json-pretty'; // Import component for formatted JSON display
 import Buffering from '../buffer/BufferComponent';
+import { CiCircleRemove } from 'react-icons/ci';
 
 // Define custom styles for JSONPretty component
 const customTheme = {
@@ -42,7 +43,6 @@ const CheckHeaders = () => {
     punchoutURL: '', // URL input by the user
   });
   const [errorMessage, setErrorMessage] = useState(''); // Error message state
-  const [successMessage, setSuccessMessage] = useState(''); // Success message state
   const [responseData, setResponseData] = useState(null); // State for storing API response
 
   // remove error mesages after 8 secs.
@@ -50,7 +50,7 @@ const CheckHeaders = () => {
     if (errorMessage) {
       const timer = setTimeout(() => {
         setErrorMessage('');
-      }, 8000);
+      }, 6000);
       return () => clearTimeout(timer); // Cleanup on unmount
     }
   }, [errorMessage]);
@@ -59,14 +59,18 @@ const CheckHeaders = () => {
   const ValidateURL = () => {
     const { punchoutURL } = formData;
     if (!punchoutURL) {
-      setErrorMessage('Please enter a valid URL with the HTTP(S) protocol.'); // Set error if URL is empty
+      setErrorMessage(
+        'Please enter a valid URL with http:// or https:// protocol.'
+      ); // Set error if URL is empty
       return false;
     }
     try {
       const urlObject = new URL(punchoutURL); // Create URL object to validate
 
       if (urlObject.protocol !== 'http:' && urlObject.protocol !== 'https:') {
-        setErrorMessage('Please enter a valid URL with the HTTP(S) protocol.'); // Set error if protocol is not HTTP or HTTPS
+        setErrorMessage(
+          'Please enter a valid URL with http:// or https:// protocol.'
+        ); // Set error if protocol is not HTTP or HTTPS
         return false;
       }
 
@@ -76,7 +80,9 @@ const CheckHeaders = () => {
       });
       return true;
     } catch (error) {
-      setErrorMessage('Please add te HTTP(s) protocol to the URL.'); // Handle invalid URL format
+      setErrorMessage(
+        'Please enter a valid URL with http:// or https:// protocol.'
+      ); // Handle invalid URL format
       return false;
     }
   };
@@ -103,7 +109,7 @@ const CheckHeaders = () => {
     const { punchoutURL } = formData;
 
     try {
-       // Activate the spinner
+      // Activate the spinner
       setErrorMessage(''); // Clear any previous error messages
       setIsLoading(true);
       // Send POST request to backend API
@@ -138,7 +144,6 @@ const CheckHeaders = () => {
           `Failed to retrieve data. ${result.error} ${result.details}`
         ); // Set error message
         setResponseData(null);
-        
       }
     } catch (error) {
       setSuccessMessage('');
@@ -163,6 +168,10 @@ const CheckHeaders = () => {
   const handleBack = () => {
     setResponseData(null);
     setSuccessMessage('');
+    setErrorMessage('');
+  };
+
+  const handleCloseError = () => {
     setErrorMessage('');
   };
 
@@ -297,12 +306,7 @@ const CheckHeaders = () => {
               />
             </div>
             {/* Display messages */}
-            {errorMessage && (
-              <div className={styles.errorMessage}>{errorMessage}</div>
-            )}
-            {successMessage && (
-              <div className={styles.successMessage}>{successMessage}</div>
-            )}
+
             <div className={styles.infoBox}>
               <div className={styles.info}>
                 The result of the check headers are as follows:
@@ -316,19 +320,28 @@ const CheckHeaders = () => {
               <div className={styles.info}>X-Frame-Options</div>
             </div>
           </div>
-          <div className={styles.btnContainer}>
-            <button className={styles.btn} onClick={handleReset}>
-              Reset
-            </button>
-            <button
-              className={styles.btn}
-              onClick={handleSend}
-              disabled={!formData.punchoutURL}
-            >
-              Send
-            </button>
-            <Buffering isActive={isLoading} />
-          </div>
+          {errorMessage ? (
+            <div className={styles.errorMessage}>{errorMessage}
+            <CiCircleRemove
+                  size={26}
+                  onClick= {handleCloseError}
+                />
+            </div>
+          ) : (
+            <div className={styles.btnContainer}>
+              <button className={styles.btn} onClick={handleReset}>
+                Reset
+              </button>
+              <button
+                className={styles.btn}
+                onClick={handleSend}
+                disabled={!formData.punchoutURL}
+              >
+                Send
+              </button>
+              <Buffering isActive={isLoading} />
+            </div>
+          )}
         </>
       )}
     </div>

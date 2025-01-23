@@ -11,7 +11,6 @@ const OciTestTool = () => {
 
   const [method, setMethod] = useState('GET');
   const [errorMessage, setErrorMessage] = useState('');
-  const [sucessMessage, setSuccessMessage] = useState('');
   const [customParams, setCustomParams] = useState([]); // Start with an empty array
   const [isLoading, setIsLoading] = useState(false);
 
@@ -58,13 +57,13 @@ const OciTestTool = () => {
       try {
         const url = new URL(baseURL);
         const searchParams = new URLSearchParams(url.search);
-  
+
         // Normalize keys to lowercase for comparison but keep values as-is
         const paramsMap = {};
         for (const [key, value] of searchParams.entries()) {
           paramsMap[key.toLowerCase()] = value; // Lowercase the key only
         }
-  
+
         // Extract form data (using lowercase keys)
         setFormData((prevData) => ({
           ...prevData,
@@ -72,14 +71,15 @@ const OciTestTool = () => {
           password: paramsMap['password'] || '', // Case-insensitive lookup
           hookURL: paramsMap['hook_url'] || '', // Case-insensitive lookup
         }));
-  
+
         // Extract custom params, preserving original key names
         const updatedCustomParams = Array.from(searchParams.entries())
           .filter(
-            ([key]) => !['username', 'password', 'hook_url'].includes(key.toLowerCase())
+            ([key]) =>
+              !['username', 'password', 'hook_url'].includes(key.toLowerCase())
           )
           .map(([key, value]) => ({ key, value, id: uuidv4(), prevKey: key }));
-  
+
         setCustomParams((prevParams) => {
           if (
             JSON.stringify(prevParams) !== JSON.stringify(updatedCustomParams)
@@ -101,7 +101,6 @@ const OciTestTool = () => {
       setErrorMessage('');
     }
   };
-  
 
   const debouncedExtractParamsFromURL = useCallback(
     debounce((baseURL) => {
@@ -261,15 +260,7 @@ const OciTestTool = () => {
       if (response.ok) {
         setIsLoading(false); // Deactivate the spinner
         const result = await response.json();
-
         if (result.success && result.response) {
-          setSuccessMessage(
-            'The OCI PunchOut session will be open in a new window in a few seconds'
-          );
-          setTimeout(() => {
-            setSuccessMessage('');
-          }, 6000);
-
           if (method === 'POST') {
             const form = document.createElement('form');
             form.method = 'POST';
@@ -300,7 +291,6 @@ const OciTestTool = () => {
           setTimeout(() => {
             setErrorMessage('');
           }, 6000);
-          setSuccessMessage('');
         }
       } else {
         setIsLoading(false);
@@ -309,7 +299,6 @@ const OciTestTool = () => {
         setTimeout(() => {
           setErrorMessage('');
         }, 6000);
-        setSuccessMessage('');
       }
     } catch (error) {
       setIsLoading(false);
@@ -317,9 +306,13 @@ const OciTestTool = () => {
       setTimeout(() => {
         setErrorMessage('');
       }, 6000);
-      setSuccessMessage('');
     }
   };
+
+  const handleCloseError = () => {
+    setErrorMessage('');
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.form}>
@@ -338,7 +331,7 @@ const OciTestTool = () => {
           <div className={styles.checkedBox}>
             <div className={styles.checkBoxlabel}>Use POST Method</div>
             <input
-            className={styles.checkboxIcon}
+              className={styles.checkboxIcon}
               type="checkbox"
               id="usePostMethod"
               checked={method === 'POST'}
@@ -346,11 +339,6 @@ const OciTestTool = () => {
             />
           </div>
         </div>
-        {errorMessage ? (
-          <div className={styles.errorMessage}>{errorMessage}</div>
-        ) : (
-          <div></div>
-        )}
         <div className={styles.span}>
           <div className={styles.label}>Credentials</div>
           <div className={styles.hr}></div>
@@ -429,20 +417,22 @@ const OciTestTool = () => {
           Add Params +
         </button>
       </div>
-      {sucessMessage ? (
-        <div className={styles.successMessage}>{sucessMessage}</div>
+      {errorMessage ? (
+        <div className={styles.errorMessage}>
+          {errorMessage}
+          <CiCircleRemove size={26} onClick={handleCloseError} />
+        </div>
       ) : (
-        <div></div>
+        <div className={styles.btnContainer}>
+          <button className={styles.btn} onClick={handleReset}>
+            Reset
+          </button>
+          <button className={styles.btn} onClick={handleSend}>
+            Send
+          </button>
+          <Buffering isActive={isLoading} />
+        </div>
       )}
-      <div className={styles.btnContainer}>
-        <button className={styles.btn} onClick={handleReset}>
-          Reset
-        </button>
-        <button className={styles.btn} onClick={handleSend}>
-          Send
-        </button>
-        <Buffering isActive={isLoading} />
-      </div>
     </div>
   );
 };

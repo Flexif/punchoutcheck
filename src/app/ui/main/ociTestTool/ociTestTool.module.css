@@ -13,6 +13,8 @@
 
 .errorMessage {
   display         : flex;
+  align-items     : center;
+  justify-content : space-between;
   background-color: var(--warn);
   padding         : 5px;
   font-weight     : 400;
@@ -20,17 +22,7 @@
   width           : fit-content;
   border-radius   : 5px;
   color           : var(--text);
-}
-
-.successMessage {
-  display         : flex;
-  background-color: var(--success);
-  padding         : 5px;
-  font-weight     : 400;
-  font-size       : 14px;
-  width           : fit-content;
-  border-radius   : 5px;
-  color           : var(--text);
+  width           : 100%;
 }
 
 .inputsPunchout {
@@ -61,7 +53,8 @@
   align-items: center;
   text-align : center;
 }
-.checkboxIcon{
+
+.checkboxIcon {
   transform: scale(1.3);
 }
 
@@ -177,6 +170,7 @@
 }
 
 .inputs:hover,
-.inputsPunchout:hover, .customInputs:hover {
+.inputsPunchout:hover,
+.customInputs:hover {
   box-shadow: 0 0 10px var(--iconHoverSec);
 }
