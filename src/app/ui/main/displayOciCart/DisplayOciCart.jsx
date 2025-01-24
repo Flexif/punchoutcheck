@@ -54,11 +54,12 @@ const DisplayOciCart = () => {
             const data = await response.json();
             setCartData(data.data);
           } else {
-            setError(`Failed to fetch data: ${response.statusText}`);
+            const errorData = await response.json();
+            setError(`${errorData.message}`);
           }
         } catch (fetchError) {
           console.error('Fetch Error:', fetchError);
-          setError(`Failed to fetch data: ${fetchError.message}`);
+          setError(`${fetchError.message}`);
         } finally {
           setLoading(false);
         }
@@ -71,15 +72,15 @@ const DisplayOciCart = () => {
   }, [cartId, backendURL]);
 
   if (loading) {
-    return <div className={styles.container}>Loading...</div>;
+    return <div className={styles.loading}>Loading...</div>;
   }
 
   if (error) {
-    return <div className={styles.container}>Error: {error}</div>;
+    return <div className={styles.infoError}>Error: {error}</div>;
   }
 
   if (!cartData) {
-    return <div className={styles.container}>No data found.</div>;
+    return <div className={styles.infoError}>No data found.</div>;
   }
 
   const uniqueKeys = Object.keys(cartData);
